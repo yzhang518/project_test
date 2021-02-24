@@ -1,0 +1,89 @@
+<!-----------------------------------------------------------------------------
+Main Heading
+------------------------------------------------------------------------------->  
+
+	<h1>Manage Books</h1>
+	
+<!-----------------------------------------------------------------------------
+Add New Book
+	
+***Should author and category information be a drop down list of available options?
+***Not sure the best way to add multiple authors and categories?
+------------------------------------------------------------------------------->
+	<h2  class="mt-5">Add a Book</h2>
+	<form id="addForm" class="mx-left p-2">
+	  
+      <label for="title">Title</label>
+      <input class="form-control w-50" type="text" name="title" id="title" required>
+
+      <label for="firstName">Author's First Name</label>
+      <input class="form-control w-50" type="text" name="firstName" id="firstName" required>
+	  
+      <label for="lastName">Author's Last Name</label>
+      <input class="form-control w-50" type="text" name="lastName" id="lastName" required>
+ 
+	  <button class="mt-2 mb-2 d-block" id="addAuthor" name="addAuthor">Additional Author</button>
+	  <p class="text-success" id="authorMessage"></p>
+
+	  <label for="price">Price</label>
+      <input class="form-control w-50" type="number" step="0.01" name="price" id="price" required>
+	  
+	  <label for="copyrightYear">Copyright Year</label>
+      <input class="form-control w-50" type="text" name="copyrightYear" id="copyrightYear" required>
+	  
+	  <label for="publisher">Publisher</label>
+      <input class="form-control w-50" type="text" name="publisher" id="publisher" required>
+	  
+	  <label for="category">Category</label>
+      <input class="form-control w-50" type="text" name="category" id="category" required>	  
+
+	  <button class="mt-2 mb-2 d-block" id="addCategory" name="addCategory">Additional Category</button>
+	  <p class="text-success" id="categoryMessage"></p>	  
+	  
+      <input class="mt-2" type="submit" name="Add" value="Add Book">
+    </form>
+	
+<!-----------------------------------------------------------------------------
+Remove Books
+Sources: https://getbootstrap.com/docs/4.0/components/forms/ and
+	https://getbootstrap.com/docs/4.0/utilities/borders/
+
+***Should we do a search by title here so that all of the books don't populate?
+***Not sure exactly how to make multiple authors show up yet
+------------------------------------------------------------------------------->	
+	<h2 class="mt-5">Remove a Book</h2>
+	{{#if books}}
+    <table>
+      <thead>
+        <tr>
+          <th class="mx-left p-2">Title</th>
+          <th class="mx-left p-2">Authors</th>
+          <th class="mx-left p-2">Price</th>
+          <th class="mx-left p-2">Copyright</th>
+          <th class="mx-left p-2">Publisher</th>
+          <th class="mx-left p-2">Categories</th>
+        </tr>
+      </thead>
+      {{#each books}}
+      <tr>
+        <td class="mx-left p-2">{{this.title}}</td>
+        <td class="mx-left p-2">{{#each this.authors}}{{this.firstName}} {{this.lastName}}<br>{{/each}}</td>
+        <td class="mx-left p-2">{{this.price}}</td>
+        <td class="mx-left p-2">{{this.copyrightYear}}</td>
+        <td class="mx-left p-2">{{this.publisher}}</td>
+        <td class="mx-left p-2">{{#each this.categories}}{{this.catName}}<br>{{/each}}</td>
+        <td class="mx-left p-2">
+          <form id="deleteBook{{this.bookID}}">
+            <input form ="deleteBook{{this.bookID}}" type="hidden" name="id" id="{{this.bookID}}" value="{{this.bookID}}">
+            <input form ="deleteBook{{this.bookID}}" class="border-danger" type="submit" name="Delete" value="Delete">
+          </form>
+        </td>
+      </tr>
+      {{/each}}
+    </table>
+    {{/if}}
+	
+<!-----------------------------------------------------------------------------
+  Form Submission JS
+------------------------------------------------------------------------------->
+     <script src="scripts/books.js"></script>

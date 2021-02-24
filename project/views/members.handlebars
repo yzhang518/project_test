@@ -1,0 +1,71 @@
+
+<!-----------------------------------------------------------------------------
+Main Heading
+------------------------------------------------------------------------------->  
+	<h1>Manage Memberships</h1>
+	
+<!-----------------------------------------------------------------------------
+Add New Member
+------------------------------------------------------------------------------->
+	<h2  class="mt-5">Add a New Member</h2>
+	<form id="addForm" class="mx-left p-2">
+	  
+      <label for="firstName">First Name</label>
+      <input class="form-control w-50" type="text" name="addFirstName" id="addFirstName" required>
+	  
+      <label for="lastName">Last Name</label>
+      <input class="form-control w-50" type="text" name="addLastName" id="addLastName" required>
+	  
+	  <label for="phoneNum">Phone Number</label>
+      <input class="form-control w-50" type="tel" name="addPhoneNum" id="addPhoneNum" required>
+	  
+	  <label for="memberEmail">Email Address</label>
+      <input class="form-control w-50" type="email" name="addMemberEmail" id="addMemberEmail" required>
+	  
+	  <label for="memberPwd">Password</label>
+      <input class="form-control w-50" type="password" name="addMemberPWD" id="addMemberPWD" required>
+	  
+      <input class="mt-2" type="submit" name="Add" value="Add">
+    </form>
+	
+<!-----------------------------------------------------------------------------
+Update Current Members
+Sources: https://getbootstrap.com/docs/4.0/components/forms/ and
+	https://getbootstrap.com/docs/4.0/utilities/borders/
+	
+***Should have some kind of restriction so all members don't show? (10,000 people)
+***Should update go to a separate page? Or do some script on the page?
+------------------------------------------------------------------------------->	
+	<h2  class="mt-5">Update Current Members</h2>
+	{{#if members}}
+    <table>
+      <thead>
+        <tr>
+          <th class="mx-left p-2">Last Name</th>
+          <th class="mx-left p-2">First Name</th>
+          <th class="mx-left p-2">Email</th>
+          <th class="mx-left p-2">Phone Number</th>
+          <th class="mx-left p-2" colspan="2">Action</th>
+        </tr>
+      </thead>
+      {{#each members}}
+      <tr>
+        <td class="mx-left p-2"><input form="updateForm{{this.memberID}}" id="lastName{{this.memberID}}" type="text" name="lastName" value="{{this.lastName}}" required></td>
+        <td class="mx-left p-2"><input form="updateForm{{this.memberID}}" id="firstName{{this.memberID}}" type="text" name="firstName" value="{{this.firstName}}" required></td>
+		<td class="mx-left p-2"><input form="updateForm{{this.memberID}}" id="memberEmail{{this.memberID}}" type="email" name="memberEmail" value="{{this.memberEmail}}" required></td>
+		<td class="mx-left p-2"><input form="updateForm{{this.memberID}}" id="phoneNum{{this.memberID}}" type="tel" name="phoneNum" value="{{this.phoneNum}}" required></td>
+        <td class="mx-left p-2">
+		  <form id="updateForm{{this.memberID}}">
+            <input form="updateForm{{this.memberID}}" type="hidden" name="id" id="{{this.memberID}}" value="{{this.memberID}}">
+            <input form="updateForm{{this.memberID}}" type="submit" name="Update" value="Update">
+          </form>
+        </td>
+      </tr>
+      {{/each}}
+    </table>
+    {{/if}} 
+	
+<!-----------------------------------------------------------------------------
+  Form Submission JS
+------------------------------------------------------------------------------->
+     <script src="scripts/members.js"></script>

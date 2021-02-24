@@ -1,0 +1,39 @@
+<head>
+    <meta charset="utf-8">
+    <title>Authors</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+        integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<h1>Manage Authors</h1>
+<br><br>
+<h2>Add an Author</h2>
+<form id="addAuthor" method="post">
+    <label for "firstName">First Name:</label>
+    <br>
+    <input type="text" name="firstName" id="firstName">
+    <br><br>
+    <label for "lastName">Last Name:</label>
+    <br>
+    <input type="text" name="lastName" id="lastName">
+    <br><br>
+    <label for "hometown">Hometown:</label>
+    <br>
+    <input type="text" name="hometown" id="hometown">
+    <br><br>
+    <label for "bio">Bio:</label>
+    <br>
+    <input type="text" name="bio" id="bio">
+    <br><br>
+    <input type="submit" id="authorSubmit" name="addAuthor" value="Add">
+</form>
+
+
+<br><br>
+<br><br>
+<h2>Authors:</h2>
+<div id="authorTable">
+</div>
+
+<script src="authors.js"></script>
