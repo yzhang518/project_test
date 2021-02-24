@@ -90,8 +90,6 @@ app.get('/books', function (req, res, next) {
       context.books = result;
 	  
       getLists(0, context, res);
-  //    res.render('books', context);
-      //Loop through each book and get categories and authors from database
 
     });
 });
