@@ -86,12 +86,12 @@ app.get('/books', function (req, res, next) {
       if (err) {
         console.log(err);
       }
-
-      //Loop through each book and get categories and authors from database
-
       context.type = 'Books';
       context.books = result;
-      res.render('books', context);
+	  
+      getLists(0, context, res);
+  //    res.render('books', context);
+      //Loop through each book and get categories and authors from database
 
     });
 });
@@ -174,7 +174,7 @@ app.post('/books', function (req, res, next) {
   res.send(context);
 });
 
-//NOT WORKING 
+
 /****************
  ** Errors     **
  ****************/
@@ -183,6 +183,7 @@ app.use(function (req, res) {
   res.render('404');
 });
 
+//NOT WORKING NOT USING NEXT FOR DEBUGGING
 app.use(function (err, req, res, next) {
   console.error(err.stack);
   res.status(500);
@@ -192,3 +193,39 @@ app.use(function (err, req, res, next) {
 app.listen(app.get('port'), function () {
   console.log('Express started on http://localhost:' + app.get('port') + '; press Ctrl-C to terminate.');
 });
+
+function getLists(i, context, res){
+  var bookTotal = context.books.length;
+  
+  // At last book render page
+  if(i === bookTotal){
+    res.render('books', context);
+    return;
+  }
+  
+  // Get Author List for Current Book
+  var bookID = context.books[i].bookID
+  mysql.pool.query("SELECT firstName, lastName FROM author_book_table ab JOIN Authors a on ab.authorID = a.authorID AND ab.bookID = ?", 
+  [bookID], function(err, result){
+    if(err){
+  	  console.log(err);
+  	}
+	
+	// Store Author List
+    context.books[i].authors = result;
+
+    // Get Category List for Current Book
+    mysql.pool.query("SELECT catName FROM cat_book_table cb JOIN Categories c on cb.catID = c.catID AND cb.bookID = ?", 
+    [context.books[i].bookID], function(err, result){
+      if(err){
+ 	    console.log(err);
+      }
+	  
+      // Store Category List
+      context.books[i].categories = result;	
+	  
+      // Go to next book			
+      getLists(i+1, context, res);
+    });
+  });
+}

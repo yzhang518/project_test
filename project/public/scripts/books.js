@@ -24,7 +24,7 @@ function bindButtons(){
 	else{
 	  // Send Data
 	  data.addAuthor = true;
-	  sendData(data, 0);	
+	  sendData(data, 1);	
 	  
       // Message that it was submitted
       document.getElementById('authorMessage').innerHTML = ""+data.firstName + " " + data.lastName + " submitted.";	 
@@ -54,7 +54,7 @@ function bindButtons(){
 	else{
 	  // Send Data
 	  data.addCategory = true;
-	  sendData(data, 0);	
+	  sendData(data, 1);	
 	  
       // Message that it was submitted
       document.getElementById('categoryMessage').innerHTML = ""+data.category+ " submitted.";

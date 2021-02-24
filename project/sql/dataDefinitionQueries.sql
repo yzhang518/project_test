@@ -156,19 +156,39 @@ INSERT INTO Members (memberPWD, memberEmail, firstName, lastName, phoneNum)
 VALUES
   ('P@$$word', 'email@email.com', 'Pauli', 'Murray', '555-555-5555'),
   ('P@$$word', 'email2@email.com', 'Bayard', 'Rustin', '123-555-5555'),
-  ('P@$$word', 'email3@email.com', 'Lorraine', 'Hansberry', '555-456-5555');
+  ('P@$$word', 'email3@email.com', 'Lorraine', 'Hansberry', '555-456-5555'),
+  ('test', 'test@gmail.com', 'James', 'Baldwin', '123-456-7890');
   
 -- INSERT sample data into Borrows table
 INSERT INTO Borrows (bookID, memberID, transactionID, borrowDate, dueDate, returnDate, overdue)
 VALUES(
     1,
-    1,
+    (SELECT memberID FROM Members WHERE memberEmail='test@gmail.com'),
     CONCAT(CURDATE(),'-',1),
     CURDATE(),
     DATE_ADD(CURDATE(), INTERVAL 21 DAY),
     NULL,
     False
-);
+),
+(
+    2,
+    2,
+    CONCAT(CURDATE(),'-',1),
+    CURDATE(),
+    DATE_ADD(CURDATE(), INTERVAL 21 DAY),
+    NULL,
+    False
+),
+(
+    3,
+    3,
+    CONCAT(CURDATE(),'-',1),
+    CURDATE(),
+    DATE_ADD(CURDATE(), INTERVAL 21 DAY),
+    NULL,
+    False
+),
+;
 
 -- INSERT sample data into cat_book table
 INSERT INTO cat_book_table (catID, bookID)
