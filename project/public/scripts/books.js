@@ -103,7 +103,7 @@ function bindButtons(){
 function sendData(data, reload){
       // Send Input Data
       var request = new XMLHttpRequest();
-      request.open('POST', 'http://flip1.engr.oregonstate.edu:3956/books', true);
+      request.open('POST', '/books', true);
       request.setRequestHeader('content-type', 'application/json');
       request.addEventListener('load', function(){
         if(request.status >= 200 && request.status <400){
@@ -120,68 +120,3 @@ function sendData(data, reload){
       }); 
       request.send(JSON.stringify(data));	
 }
-
-/*DELETE
-      -- goes in add section
-	  if(authorIndex > 0){
-		for(var i = 1; i<=data.additionalAuthors; i++ ){
-		  if(document.getElementById('firstName'+i).value && document.getElementById('lastName'+i).value){
-			  
-		  }
-	    }
-		  
-	  }
-	  ---- goes in additional authors section
- 	  data.additionalAuthors++;
-      var button = document.getElementById('addAuthor');
-	 // Source: https://stackoverflow.com/questions/21422337/append-element-as-sibling-after-element
-	  
-	  // Add First Name Label
-      var element = getLabelElem( "firstName"+data.additionalAuthors, "Author "+(data.additionalAuthors+1)+"'s First Name");
-	  event.target.insertBefore(element, button);
-	  // Add First Name Field
-      element = getInputElem("firstName"+data.additionalAuthors);
-      event.target.insertBefore(element, button);
-	  
-	  // Add Last Name Label
-      var element = getLabelElem( "lastName"+data.additionalAuthors, "Author "+(data.additionalAuthors+1)+"'s Last Name");
-	  event.target.insertBefore(element, button);	  
-	  // Add Last Name Field
-	  element = getInputElem("lastName"+data.additionalAuthors);
-      event.target.insertBefore(element, button);
-
-// Adds HTML Label Tag and For Attribute
-// Parameters: elemName is used for the for attribute value
-//             text is innerHTML text
-
-function getLabelElem(elemName, text){
-	
-  // Create Label
-  var element = document.createElement("label");
-  
-  // Add Attribute
-  element.setAttribute("for", elemName)
-  
-  // Add Inner HTML
-  element.innerHTML = text;
-  
-  return element;
-
-}
-
-// Adds HTML Input Tag and Attributes
-// Parameters: elemName is used for name and id attributes
-function getInputElem(elemName){
-  // Create Input
-  var element = document.createElement("input");	  
-  element = document.createElement("input");
-  var inputAtts = {class:"form-control w-50", type: "text", name: elemName, id: elemName}
-//DELETE	  var inputAtts = ["class", "type", "name", "id"]
-//DELETE	  var inputAttVals = ["form-control w-50", "text", "firstName"+data.additionalAuthors, "firstName"+data.additionalAuthors]
-      // Add Input Attributes
-    for (var att in inputAtts){
-      element.setAttribute(att, inputAtts[att]);
-console.log(att+inputAtts[att]);
-	}
-  return element;	  
-}*/

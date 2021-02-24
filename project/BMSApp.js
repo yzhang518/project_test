@@ -1,27 +1,25 @@
 var express = require('express');
 var mysql = require('./dbcon.js');
-var bodyParser = require('body-parser');
-var path = require('path');
 
 var app = express();
-var handlebars = require('express-handlebars').create({
-  defaultLayout: 'main',
-});
+var handlebars = require('express-handlebars').create({defaultLayout:'main'});
+var bodyParser = require("body-parser");
+var mysql = require("./dbcon.js");
+
+
+app.use(bodyParser.urlencoded({extended: false}));
+app.use(bodyParser.json());
+app.use(express.static("public"));
 
 app.engine('handlebars', handlebars.engine);
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use('/static', express.static('public'));
 app.set('view engine', 'handlebars');
-app.set('port', 3956);
-app.set('mysql', mysql);
+app.set('port', process.argv[2]);
 
 app.use('/borrows', require('./borrows.js'));
 app.use('/categories', require('./categories.js'));
 app.use('/authors', require('./authors.js'));
 app.use('/search', require('./search.js'));
 app.use('/login', require('./login.js'));
-
-app.use('/', express.static('public'));
 
 /****************
  ** Index Page **
@@ -194,43 +192,3 @@ app.use(function (err, req, res, next) {
 app.listen(app.get('port'), function () {
   console.log('Express started on http://localhost:' + app.get('port') + '; press Ctrl-C to terminate.');
 });
-
-
-
-/*
-//Need soomething to create loop and send at end here    ({
-console.log('length'+context.books.length); //DELETE
-console.log('bookID'+context.books[i].bookID); //DELETE
-  // Get Authors
-    //https://stackoverflow.com/questions/21184340/async-for-loop-in-node-js
-        if(i == context.books.length){
-
-      return;
-      }
-
-    mysql.pool.query("SELECT firstName, lastName FROM author_book_table ab JOIN Authors a on ab.authorID = a.authorID AND ab.bookID = ?",
-        [context.books[i].bookID], function(err, result){
-            if(err){
-          next(err);
-          return;
-        }
-      context.books[i].authors = {};
-      context.books[i].authors = result;
-console.log('postAuthorIndex'+i); //DELETE
-console.log('author row'+context.books[i].authors); //DELETE
-      // Get Categories
-        mysql.pool.query("SELECT catName FROM cat_book_table cb JOIN Categories c on cb.catID = c.catID AND cb.bookID = ?",
-          [context.books[i].bookID], function(err, result){
-            if(err){
-            next(err);
-            return;
-          }
-        context.books[i].categories = {};
-        context.books[i].categories = result;
-console.log('postCatIndex'+i); //DELETE
-console.log('category row'+context.books[i].categories); //DELETE
-      // Render Page After Last Result Stored
-            addLists(i+1);
-          });
-       });
-    //DELETE LOOP END });*/

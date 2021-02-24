@@ -37,7 +37,7 @@ function bindButtons(){
     }
 	
     // Send Input Data
-    request.open('POST', 'http://flip1.engr.oregonstate.edu:3956/members', true);
+    request.open('POST', '/members', true);
     request.setRequestHeader('content-type', 'application/json');
     request.addEventListener('load', function(){
       if(request.status >= 200 && request.status <400){
