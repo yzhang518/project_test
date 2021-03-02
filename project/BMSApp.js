@@ -108,7 +108,7 @@ app.post('/books', function (req, res, next) {
       [req.body.firstName, req.body.lastName, req.body.title],
       function (err, result) {
         if (err) {
-          context.SQLWarning = warnings.author[err.errno];
+          context.SQLWarning = warnings.author_book[err.errno];
     	  console.log(err);
         }
 		else{
@@ -127,7 +127,7 @@ app.post('/books', function (req, res, next) {
       [req.body.category, req.body.title],
       function (err, result) {
         if (err) {
-          context.SQLWarning = warnings.category[err.errno];
+          context.SQLWarning = warnings.category_book[err.errno];
     	  console.log(err);
         }
 		else{
@@ -145,7 +145,10 @@ app.post('/books', function (req, res, next) {
       [req.body.title, req.body.price, req.body.copyrightYear, req.body.publisher],
       function (err, result) {
         if (err) {
-          console.log(err);
+          context.SQLWarning = warnings.book[err.errno];
+    	  console.log(err);
+		  context.type = 'Books';
+	      res.send(context);
         }
         else {
           // Add Relationship to cat_book_table  
@@ -154,7 +157,10 @@ app.post('/books', function (req, res, next) {
             [req.body.category, req.body.title],
             function (err, result) {
               if (err) {
+                context.SQLWarning = warnings.book[err.errno];
                 console.log(err);
+		        context.type = 'Books';
+	            res.send(context);
               }
               else {
                 // Add Relationship to author_book_table  
@@ -163,8 +169,14 @@ app.post('/books', function (req, res, next) {
                   [req.body.firstName, req.body.lastName, req.body.title],
                   function (err, result) {
                     if (err) {
+                      context.SQLWarning = warnings.book[err.errno];
                       console.log(err);
                     }
+					else{
+                      context.SQLWarning = false;
+					}
+		            context.type = 'Books';
+	                res.send(context);	
                   });
               }
             });
