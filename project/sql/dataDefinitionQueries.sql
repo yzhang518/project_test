@@ -49,7 +49,7 @@ CREATE TABLE Categories (
 --Create cat_book_table
 DROP TABLE IF EXISTS cat_book_table;
 CREATE TABLE cat_book_table (
-	catID int(11) NOT NULL AUTO_INCREMENT,
+	catID int(11) NOT NULL,
 	bookID int(11) NOT NULL,
 	PRIMARY KEY (catID, bookID),
 	FOREIGN KEY (catID) 
@@ -63,7 +63,7 @@ CREATE TABLE cat_book_table (
 --Create author_book_table
 DROP TABLE IF EXISTS author_book_table;
 CREATE TABLE author_book_table (
-	authorID int(11) NOT NULL AUTO_INCREMENT,
+	authorID int(11) NOT NULL,
 	bookID int(11) NOT NULL,
 	PRIMARY KEY (authorID, bookID),
 	FOREIGN KEY (authorID)

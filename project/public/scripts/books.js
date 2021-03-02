@@ -27,7 +27,7 @@ function bindButtons(){
 	  sendData(data, 1);	
 	  
       // Message that it was submitted
-      document.getElementById('authorMessage').innerHTML = ""+data.firstName + " " + data.lastName + " submitted.";	 
+//DELETE      document.getElementById('authorMessage').innerHTML = ""+data.firstName + " " + data.lastName + " submitted.";	 
       // Clear Author Fields
 	  document.getElementById('firstName').value = "";
 	  document.getElementById('lastName').value = "";	  
@@ -57,7 +57,7 @@ function bindButtons(){
 	  sendData(data, 1);	
 	  
       // Message that it was submitted
-      document.getElementById('categoryMessage').innerHTML = ""+data.category+ " submitted.";
+ //DELETE     document.getElementById('categoryMessage').innerHTML = ""+data.category+ " submitted.";
 
 	  // Clear Author Fields
 	  document.getElementById('category').value = "";	  
@@ -106,7 +106,8 @@ function sendData(data, reload){
       request.open('POST', '/books', true);
       request.setRequestHeader('content-type', 'application/json');
       request.addEventListener('load', function(){
-        if(request.status >= 200 && request.status <400){
+		var response = JSON.parse(request.responseText);
+        if(request.status >= 200 && request.status <400 && !response.SQLWarning){
           console.log('Request Successful');
 		  if(reload){
 			console.log('Reloading');
@@ -115,7 +116,8 @@ function sendData(data, reload){
           }
         }
         else{
-          console.log('Error: ' + request.status);
+		  alert('Error: ' + response.SQLWarning);
+          console.log('Error: ' + response.SQLWarning);
         }
       }); 
       request.send(JSON.stringify(data));	

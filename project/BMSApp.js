@@ -5,6 +5,7 @@ var app = express();
 var handlebars = require('express-handlebars').create({defaultLayout:'main'});
 var bodyParser = require("body-parser");
 var mysql = require("./dbcon.js");
+var warnings = require("./warnings.js");
 
 
 app.use(bodyParser.urlencoded({extended: false}));
@@ -78,13 +79,14 @@ app.post('/members', function (req, res, next) {
  ** Books Page **
  ****************/
 //DISPLAY DOESN'T ACCOUNT FOR MULTIPLE AUTHORS AND CATEGORIES
+// res.append Source: https://www.tutorialspoint.com/nodejs/nodejs_response_object.htm
 app.get('/books', function (req, res, next) {
   var context = {};
   mysql.pool.query(
     "SELECT bookID, title, price, copyrightYear, publisher FROM Books ORDER BY title",
     function (err, result) {
       if (err) {
-        console.log(err);
+		console.log(err);
       }
       context.type = 'Books';
       context.books = result;
@@ -106,9 +108,16 @@ app.post('/books', function (req, res, next) {
       [req.body.firstName, req.body.lastName, req.body.title],
       function (err, result) {
         if (err) {
-          console.log(err);
+          context.SQLWarning = warnings.author[err.errno];
+    	  console.log(err);
         }
+		else{
+          context.SQLWarning = false;
+		}
+		context.type = 'Books';
+	    res.send(context);
       });
+
   }
 
   // Add Category Book Relationship 
@@ -118,8 +127,14 @@ app.post('/books', function (req, res, next) {
       [req.body.category, req.body.title],
       function (err, result) {
         if (err) {
-          console.log(err);
+          context.SQLWarning = warnings.category[err.errno];
+    	  console.log(err);
         }
+		else{
+          context.SQLWarning = false;
+		}
+		context.type = 'Books';
+	    res.send(context);
       });
   }
 
@@ -168,8 +183,8 @@ app.post('/books', function (req, res, next) {
         }
       });
   }
-  context.type = 'Books';
-  res.send(context);
+
+//DELETE  res.send(context);
 });
 
 
