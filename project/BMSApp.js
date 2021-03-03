@@ -160,6 +160,11 @@ app.post('/books', function (req, res, next) {
                 context.SQLWarning = warnings.book[err.errno];
                 console.log(err);
 		        context.type = 'Books';
+				mysql.pool.query("DELETE FROM Books WHERE title=?",[req.body.title], function (err, result){
+				  if (err) {
+                    console.log(err);
+				  }
+				});
 	            res.send(context);
               }
               else {
@@ -171,6 +176,11 @@ app.post('/books', function (req, res, next) {
                     if (err) {
                       context.SQLWarning = warnings.book[err.errno];
                       console.log(err);
+    				  mysql.pool.query("DELETE FROM Books WHERE title=?",[req.body.title], function (err, result){
+	    			    if (err) {
+                          console.log(err);
+			    	    }
+				    });
                     }
 					else{
                       context.SQLWarning = false;

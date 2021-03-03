@@ -17,7 +17,7 @@ DROP TABLE IF EXISTS Members;
 CREATE TABLE Members (
 	memberID int(11) NOT NULL AUTO_INCREMENT,
 	memberPWD varchar(50) NOT NULL,
-	memberEmail varchar(100) NOT NULL,
+	memberEmail varchar(100) NOT NULL UNIQUE,
 	firstName varchar(50) NOT NULL,
 	lastName varchar(50) NOT NULL,
 	phoneNum varchar(50) NOT NULL,
@@ -33,6 +33,7 @@ CREATE TABLE Authors (
     lastName varchar(50) NOT NULL,
     hometown varchar(50) NOT NULL,
     bio text NOT NULL,
+	CONSTRAINT fullName UNIQUE (firstName,lastName),
     PRIMARY KEY (authorID)
 ) ENGINE=InnoDB;
 
@@ -41,7 +42,7 @@ CREATE TABLE Authors (
 DROP TABLE IF EXISTS Categories;
 CREATE TABLE Categories (
     catID int(11) NOT NULL AUTO_INCREMENT,
-    catName varchar(50) NOT NULL,
+    catName varchar(50) NOT NULL UNIQUE,
     catDescription text NOT NULL,
     PRIMARY KEY (catID)
 ) ENGINE=InnoDB;
