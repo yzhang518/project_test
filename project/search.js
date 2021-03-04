@@ -42,12 +42,12 @@ module.exports = function () {
 
 	router.post('/insert-borrow', function (req, res, next) {
 		var context = {};
-		var a_query = "INSERT INTO Borrows (`bookID`, `transactionID`, `borrowDate`, `dueDate`, `returnDate`, `memberID`, `overdue`) VALUES (?, ?, ?, ?, ?, ? ,?)";
+		var a_query = "INSERT INTO Borrows (`bookID`, `transactionID`, `borrowDate`, `dueDate`, `returnDate`, `memberID`) VALUES (?, ?, ?, ?, ?, ? )";
 
 		var i;
 		for (i = 0; i < req.body.bookIDs.length; i++) {
 			var bookID = req.body.bookIDs[i];
-			var a_list = [bookID, req.body.transactionID, req.body.borrowDate, req.body.dueDate, req.body.returnDate, req.body.memberID, req.body.overdue];
+			var a_list = [bookID, req.body.transactionID, req.body.borrowDate, req.body.dueDate, req.body.returnDate, req.body.memberID];
 
 			mysql.pool.query(a_query, a_list, function (err, result) {
 				if (err) {
