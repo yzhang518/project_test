@@ -51,7 +51,6 @@ function bindButtons() {
 			var payload = {
 				bookIDs: id_list,
 				transactionID: now.getTime(),
-				overdue: 0,
 				borrowDate: now.toISOString().slice(0, 10),
 				returnDate: null,
 				dueDate: addDays(now, 30),
