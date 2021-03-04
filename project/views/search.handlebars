@@ -1,10 +1,7 @@
 <head>
-    <meta charset="utf-8">
-    <title>Authors Page</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
-        integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
     <link rel="stylesheet" href="css/style.css">
 </head>
+
 
 <h2>Browse the Catalog</h2>
 <form id="searchForm" method="POST">
@@ -30,51 +27,25 @@
 
 <br><br>
 <br><br>
+
 <h2>Search Results:</h2>
-<table id="searchResultTable">
-    <thead>
-        <tr id="searchResultHeader">
-            <th>Title</th>
-            <th>Author</th>
-            <th>Category</th>
-            <th>Availability</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr>
-            <td>Harry Potter I</td>
-            <td>J. K. Rowling</td>
-            <td>Fantasy</td>
-            <td>Yes</td>
-            <td>
-                <label for="row_1">SELECT</Select></label>
-                <input type="checkbox" name="row_1">
-            </td>
-        </tr>
-        <tr>
-            <td>Harry Potter II</td>
-            <td>J. K. Rowling</td>
-            <td>Fantasy</td>
-            <td>Yes</td>
-            <td>
-                <label for="row_1">SELECT</Select></label>
-                <input type="checkbox" name="row_1">
-            </td>
-        </tr>
-        <tr>
-            <td>Harry Potter III</td>
-            <td>J. K. Rowling</td>
-            <td>Fantasy</td>
-            <td>No</td>
-        </tr>
-    </tbody>
-</table>
+<div id="searchDiv">
+    <table id="searchResult">
+        <thead>
+            <tr>
+                <th>Title</th>
+                <th>Author</th>
+                <th>Category</th>
+                <th>Availability</th>
+            </tr>
+        <tbody id="tableBody">
 
-<br><br>
-<button type="button" id="borrowSubmit">BORROW</button>
+        </tbody>
+        </thead>
+    </table>
+    <br><br>
 
-</body>
-
-</html>
+    <input type="submit" id="borrowSubmit" value="BORROW">
+</div>
 
 <script src="search.js"></script>
