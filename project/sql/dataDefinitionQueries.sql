@@ -83,7 +83,6 @@ CREATE TABLE Borrows (
     memberID int(11) NOT NULL,
     transactionID varchar(50) NOT NULL,
     borrowDate date NOT NULL,
-    dueDate date NOT NULL,
     returnDate date,
     overdue boolean NOT NULL, 
     PRIMARY KEY (borrowID),
@@ -168,7 +167,6 @@ VALUES(
     CONCAT(CURDATE(),'-',1),
     CURDATE(),
     DATE_ADD(CURDATE(), INTERVAL 21 DAY),
-    NULL,
     False
 ),
 (
@@ -177,7 +175,6 @@ VALUES(
     CONCAT(CURDATE(),'-',1),
     CURDATE(),
     DATE_ADD(CURDATE(), INTERVAL 21 DAY),
-    NULL,
     False
 ),
 (
@@ -186,7 +183,6 @@ VALUES(
     CONCAT(CURDATE(),'-',1),
     CURDATE(),
     DATE_ADD(CURDATE(), INTERVAL 21 DAY),
-    NULL,
     False
 ),
 ;
