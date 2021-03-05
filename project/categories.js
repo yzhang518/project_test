@@ -31,7 +31,7 @@ module.exports = function () {
 					return;
 				}
 			});
-		mysql.pool.query('SELECT catName, catDescription FROM Categories ORDER BY catName ORDER BY catName', function (err, rows, fields) {
+		mysql.pool.query('SELECT catName, catDescription FROM Categories ORDER BY catName', function (err, rows, fields) {
 			if (err) {
 				next(err);
 				return;

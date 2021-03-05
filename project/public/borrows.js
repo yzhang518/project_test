@@ -34,7 +34,6 @@ function bindButtons() {
 	});
 }
 
-
 function loginValitation(results) {
 	if (results[0] == 0) {
 		alert(alertMsg[0]);
@@ -56,12 +55,17 @@ function loginValitation(results) {
 
 
 function buildPage(data) {
-	clearTopSec(data);
+	if (data[0] == 3) {
+		clearTopSec(data[1], "No borrowed items!");
+		return;
+	}
+
+	clearTopSec(data, "Items Out:");
 
 	var div, headers, myTable, header, cell, keys, key, btnKeys, eventBtns;
 	div = document.getElementById("borrowTable");
 	headers = ["transaction ID", "Book Title", "Borrow Date", "Due Date", "Return Date", "Over Due"];
-	keys = ["transactionID", "title", "borrowDate", "dueDate", "returnDate", "overdue"];
+	keys = ["transactionID", "title", "borrowDate", "dueDate", "returnDate"];
 	btnKeys = "return";
 
 	myTable = document.createElement("table");
@@ -74,10 +78,6 @@ function buildPage(data) {
 		headRow.appendChild(cell);
 	}
 	myTable.appendChild(headRow);
-
-	if (data == null) {
-		return;
-	}
 
 	// add data rows to the table 
 	data.forEach(addRows);
@@ -95,10 +95,12 @@ function buildPage(data) {
 					cell.innerText = item[key].slice(0, 10);
 				}
 			} else if (i == 5) { // display overdue or not
-				if (item[key] == 0) {
-					cell.innerText = "No";
-				} else {
+				var now = new Date().toISOString().slice(0, 10);
+				console.log(item.returnDate, item.dueDate, now < item.dueDate);
+				if (!item.returnDate && now > item.dueDate) {
 					cell.innerText = "Yes";
+				} else {
+					cell.innerText = "No";
 				}
 			} else {
 				cell.innerText = item[key];
@@ -138,7 +140,7 @@ function buildPage(data) {
 }
 
 
-function clearTopSec(data) {
+function clearTopSec(data, s) {
 	// clear login form and display member name
 	var topDiv = document.getElementById("topSec");
 	var loginForm = document.getElementById("loginToViewBorrows");
@@ -149,7 +151,7 @@ function clearTopSec(data) {
 	memberName.innerText = data[0].lastName + ', ' + data[0].firstName;
 	topDiv.appendChild(memberName);
 
-	document.getElementById("borrowTableTitle").innerText = "Items Out:";
+	document.getElementById("borrowTableTitle").innerText = s;
 }
 
 
@@ -177,13 +179,12 @@ function returnBook(borrowID, bookID) {
 	var req = new XMLHttpRequest();
 	var payload = {
 		isAvailable: 1,
-		overdue: 0,
 		returnDate: new Date().toISOString().slice(0, 10)
 	};
 
 	payload.borrowID = borrowID;
 	payload.bookID = bookID;
-	
+
 	var query = createQuery(payload);
 
 	req.open("POST", "/borrows/update" + query, true);
@@ -204,7 +205,7 @@ function returnBook(borrowID, bookID) {
 }
 
 function createQuery(payload) {
-	var keys = ['isAvailable', 'overdue', 'returnDate','borrowID', 'bookID']
+	var keys = ['isAvailable', 'returnDate', 'borrowID', 'bookID']
 	var a_query = "?";
 	keys.forEach(function (key) {
 		var ele = payload[key];

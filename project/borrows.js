@@ -37,14 +37,26 @@ module.exports = function () {
 				context.results = [2];
 				res.send(context);
 			} else {
-				var a_query = 'SELECT borrowID, Books.bookID, firstName, lastName, transactionID, title, borrowDate, dueDate, returnDate, overdue FROM Members INNER JOIN Borrows ON Members.memberID = Borrows.memberID INNER JOIN Books ON Borrows.bookID = Books.bookID WHERE memberEmail = ? ORDER BY borrowDate';
+				var a_query = 'SELECT borrowID, Books.bookID, firstName, lastName, transactionID, title, borrowDate, dueDate, returnDate FROM Members INNER JOIN Borrows ON Members.memberID = Borrows.memberID INNER JOIN Books ON Borrows.bookID = Books.bookID WHERE memberEmail = ? ORDER BY borrowDate';
 				mysql.pool.query(a_query, [req.query.memberEmail], function (err, rows, fields) {
 					if (err) {
 						next(err);
 						return;
 					}
-					context.results = rows;
-					res.send(context);
+
+					if (rows.length == 0) {
+						mysql.pool.query('SELECT firstName, lastName FROM Members WHERE memberEmail=?', [req.query.memberEmail], function (err, rows, fields) {
+							if (err) {
+								next(err);
+								return;
+							}
+							context.results = [3, rows];
+							res.send(context);
+						});
+					} else {
+						context.results = rows;
+						res.send(context);
+					}
 				});
 			}
 		});
@@ -60,7 +72,7 @@ module.exports = function () {
 			}
 			//console.log("am i here? books updated");
 
-			mysql.pool.query("UPDATE Borrows SET returnDate=?, overdue=? WHERE borrowID = ?", [req.query.returnDate, req.query.overdue, req.query.borrowID], function (err, result) {
+			mysql.pool.query("UPDATE Borrows SET returnDate=? WHERE borrowID = ?", [req.query.returnDate, req.query.borrowID], function (err, result) {
 				if (err) {
 					next(err);
 					return;
