@@ -15,6 +15,16 @@ const book = {
 	1048: 'No such author or category exists. Please verify author name and category name on the authors and categories pages and try again.'
 };
 
+const category = {
+	1062: 'The category name you entered already exists.',
+};
+
+const author = {
+	1062: 'The author first and last name combination you entered already exists.',
+};
+
 module.exports.author_book = author_book;
 module.exports.category_book = category_book;
 module.exports.book = book;
+module.exports.category = category;
+module.exports.author = author;

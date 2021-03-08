@@ -155,7 +155,13 @@ VALUES (
 
 -- SELECT from Categories 
 -- Display all the Categories on Categories page
+SELECT catID, catName, catDescription FROM Categories
+ORDER BY catName;
+
 SELECT catName, catDescription FROM Categories
+ORDER BY catName;
+
+SELECT * FROM Categories
 ORDER BY catName;
 
 -- UPDATE Categories 

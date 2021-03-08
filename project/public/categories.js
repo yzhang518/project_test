@@ -24,13 +24,12 @@ function bindButtons() {
 		console.log("insert query", query);
 		req.open("POST", "/categories/insert" + query, true);
 		//req.setRequestHeader('Content-Type', 'application/json');
-
 		req.addEventListener('load', function () {
-			if (req.status >= 200 && req.status < 400) {
-				var response = JSON.parse(req.responseText);
+			var response = JSON.parse(req.responseText);
+			if (req.status >= 200 && req.status < 400 && !response.SQLWarning) {
 				buildTable(response.results);
 			} else {
-				alert("error" + req.statusText);
+				alert('Error: ' + response.SQLWarning);
 			}
 		});
 
@@ -155,13 +154,12 @@ function editRow(id) {
 		req.open("POST", "/categories/update" + query, true);
 
 		req.addEventListener('load', function () {
-			if (req.status >= 200 && req.status < 400) {
-				var reponse = JSON.parse(req.responseText)
-				buildTable(reponse);
+			var response = JSON.parse(req.responseText);
+			if (req.status >= 200 && req.status < 400 && !response.SQLWarning) {
+				buildTable(response.results);
 			}
 			else {
-				console.log("Error in network request: " + req.statusText);
-			}
+				alert('Error: ' + response.SQLWarning);			}
 		});
 
 		req.send();

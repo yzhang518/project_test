@@ -3,6 +3,7 @@ module.exports = function () {
 	var router = express.Router();
 	var mysql = require('./dbcon.js');
 	var bodyParser = require('body-parser');
+	var warnings = require("./warnings.js");
 
 	router.get('/', function (req, res) {
 		res.render('categories');
@@ -27,8 +28,11 @@ module.exports = function () {
 		mysql.pool.query("INSERT INTO Categories (`catName`, `catDescription`) VALUES (?, ?)",
 			[req.query.catName, req.query.catDescription], function (err, result) {
 				if (err) {
-					next(err);
-					return;
+					context.SQLWarning = warnings.category[err.errno];
+					console.log(err);
+				}
+				else{
+					context.SQLWarning = false;					
 				}
 			});
 		mysql.pool.query('SELECT catName, catDescription FROM Categories ORDER BY catName', function (err, rows, fields) {
@@ -48,17 +52,23 @@ module.exports = function () {
 
 		mysql.pool.query("UPDATE Categories SET catName=?, catDescription=? WHERE catID = ?", [req.query.catName, req.query.catDescription, req.query.catID], function (err, result) {
 			if (err) {
-				next(err);
-				return;
+				context.SQLWarning = warnings.category[err.errno];
+				console.log(err);
+				res.send(context);
 			}
-			mysql.pool.query("SELECT * FROM Categories ORDER BY catName", function (err, rows, fields) {
-				if (err) {
-					next(err);
-					return;
-				}
-				res.type('application/json');
-				res.send(rows);
-			});
+			else{			
+			
+				mysql.pool.query("SELECT * FROM Categories ORDER BY catName", function (err, rows, fields) {
+					if (err) {
+						next(err);
+						return;
+					}
+					context.SQLWarning = false;	
+					context.results = rows;
+					res.type('application/json');
+					res.send(context);
+				});
+			}
 		});
 	});
 
