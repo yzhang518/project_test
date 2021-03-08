@@ -25,7 +25,8 @@ CREATE TABLE Members (
 ) ENGINE=InnoDB;
 
 -- Create Authors table
---*Changed Bio to text and varchar limit for firstName, lastName and hometown
+-- Changed Bio to text and varchar limit for firstName, lastName and hometown
+-- UNIQUE firstName + lastName, updated
 DROP TABLE IF EXISTS Authors;
 CREATE TABLE Authors (
     authorID int(11) NOT NULL AUTO_INCREMENT,
@@ -33,12 +34,13 @@ CREATE TABLE Authors (
     lastName varchar(50) NOT NULL,
     hometown varchar(50) NOT NULL,
     bio text NOT NULL,
-	CONSTRAINT fullName UNIQUE (firstName,lastName),
-    PRIMARY KEY (authorID)
+    PRIMARY KEY (authorID),
+    UNIQUE (firstName, lastName)
 ) ENGINE=InnoDB;
 
 -- Create Categories table
 -- Changed varchar limit for catName
+-- UNIQUE catName, updated
 DROP TABLE IF EXISTS Categories;
 CREATE TABLE Categories (
     catID int(11) NOT NULL AUTO_INCREMENT,
@@ -185,6 +187,7 @@ VALUES(
     DATE_ADD(CURDATE(), INTERVAL 21 DAY),
 	NULL
 );
+
 
 -- INSERT sample data into cat_book table
 INSERT INTO cat_book_table (catID, bookID)

@@ -88,37 +88,38 @@ ORDER BY a.lastName;
 
 
 -- Borrows table Manipulations --
--- INSERT into Borrows
+-- INSERT into Borrows 
 -- Borrow books on Search page. 
 -- Need to update the availability to False in Books table
-INSERT INTO Borrows (bookID, memberID, transactionID, borrowDate, dueDate, returnDate, overdue)
+-- QUERY UPDATED
+INSERT INTO Borrows (bookID, memberID, transactionID, borrowDate, returnDate)
 VALUES(
-    (SELECT bookID FROM Books WHERE bookTitle = :bookTitle_input),
+    :bookID_input,
     :memberID_input,
-    CONCAT(CURDATE(),'-',:memberID_input),
-    CURDATE(),
-    DATE_ADD(CURDATE(), INTERVAL 21 DAY),
-    NULL,
-    False
+    :transactionID_input,
+    :borrowDate_input,
+    :returnDate_input,
+    NULL
 );
 
--- SELECT from Borrows
+-- SELECT from Borrows 
 -- Display all the books borrowed by a specific member on View Borrows and Return Books page
-SELECT transactionID, bookTitle, memberID, borrowDate, dueDate, returnDate, overdue
-FROM Borrows
-JOIN Books ON Borrows.bookID = Books.bookID
-WHERE memberID = :memberID_input
-ORDER BY borrowDate;
+-- QUERY UPDATED
+SELECT borrowID, Books.bookID, firstName, lastName, transactionID, title, borrowDate, dueDate, returnDate FROM Members 
+INNER JOIN Borrows ON Members.memberID = Borrows.memberID 
+INNER JOIN Books ON Borrows.bookID = Books.bookID 
+WHERE memberEmail = :memberEmail_input
+ORDER BY borrowDate
 
 SELECT * FROM Members WHERE memberEmail = :memberEmail;
 
--- UPDATE Borrows --
+-- UPDATE Borrows UPDATED
 -- Return A Book On View Borrows and Return Books page
 -- Need to update the availability to True in Books table
--- Using transactionID, bookID and memberID to locate a borrow since we set bookID Nullable
+-- QUERY UPDATED
 UPDATE Borrows 
-SET returnDate = CURDATE()
-WHERE borrowID = borrowID_input;
+SET returnDate = :returnDate_input
+WHERE borrowID = :borrowID_input;
 
 
 -- Authors table Manipulations --
@@ -156,13 +157,7 @@ VALUES (
 
 -- SELECT from Categories 
 -- Display all the Categories on Categories page
-SELECT catID, catName, catDescription FROM Categories
-ORDER BY catName;
-
 SELECT catName, catDescription FROM Categories
-ORDER BY catName;
-
-SELECT * FROM Categories
 ORDER BY catName;
 
 -- UPDATE Categories 
@@ -174,12 +169,13 @@ WHERE catID = :catID_input;
 
 -- Search by Author name and display result on Search page
 -- M:M relationship between Authors and Books
-SELECT bookTitle, CONCAT(firstName,' ', lastName) as fullName, catName, isAvailable
-FROM Authors 
-JOIN author_book_table ON Authors.authorID = author_book_table.authorID
-JOIN Books ON author_book_table.bookID = Books.bookID
-JOIN cat_book_table ON Books.bookID = cat_book_table.bookID
-JOIN Categories ON cat_book_table.catID = Categories.catID 
-WHERE CONCAT(firstName, ' ', lastName) LIKE :authorName_input
-ORDER BY bookTitle;
+-- QUERY UPDATED
+SELECT Books.bookID, title, CONCAT(firstName,' ',lastName) AS fullName, catName, isAvailable 
+FROM Books 
+INNER JOIN author_book_table ON Books.bookID = author_book_table.bookID 
+INNER JOIN Authors ON author_book_table.authorID = Authors.authorID 
+INNER JOIN cat_book_table ON Books.bookID = cat_book_table.bookID 
+INNER JOIN Categories ON cat_book_table.catID = Categories.catID 
+WHERE CONCAT(firstName, ' ', lastName) LIKE authorName_input
+ORDER BY Books.bookID
 
