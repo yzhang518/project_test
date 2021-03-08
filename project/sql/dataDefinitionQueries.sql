@@ -86,7 +86,6 @@ CREATE TABLE Borrows (
     transactionID varchar(50) NOT NULL,
     borrowDate date NOT NULL,
     returnDate date,
-    overdue boolean NOT NULL, 
     PRIMARY KEY (borrowID),
     FOREIGN KEY (bookID)
     REFERENCES Books(bookID),
@@ -162,30 +161,27 @@ VALUES
   ('test', 'test@gmail.com', 'James', 'Baldwin', '123-456-7890');
   
 -- INSERT sample data into Borrows table
-INSERT INTO Borrows (bookID, memberID, transactionID, borrowDate, dueDate, returnDate, overdue)
+INSERT INTO Borrows (bookID, memberID, transactionID, borrowDate, dueDate, returnDate)
 VALUES(
     1,
     (SELECT memberID FROM Members WHERE memberEmail='test@gmail.com'),
     CONCAT(CURDATE(),'-',1),
     CURDATE(),
-    DATE_ADD(CURDATE(), INTERVAL 21 DAY),
-    False
+    DATE_ADD(CURDATE(), INTERVAL 21 DAY)
 ),
 (
     2,
     2,
     CONCAT(CURDATE(),'-',1),
     CURDATE(),
-    DATE_ADD(CURDATE(), INTERVAL 21 DAY),
-    False
+    DATE_ADD(CURDATE(), INTERVAL 21 DAY)
 ),
 (
     3,
     3,
     CONCAT(CURDATE(),'-',1),
     CURDATE(),
-    DATE_ADD(CURDATE(), INTERVAL 21 DAY),
-    False
+    DATE_ADD(CURDATE(), INTERVAL 21 DAY)
 ),
 ;
 
