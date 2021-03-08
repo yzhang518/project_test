@@ -35,22 +35,28 @@ function bindButtons(){
       data.memberEmail = document.getElementById('memberEmail' + data.memberID).value;
       data.Update = true;
     }
-	
-    // Send Input Data
-    request.open('POST', '/members', true);
-    request.setRequestHeader('content-type', 'application/json');
-    request.addEventListener('load', function(){
-      if(request.status >= 200 && request.status <400){
-        console.log('Request Successful');
-		// Source: https://techbriefers.com/10-methods-for-how-to-refresh-a-page-in-javascript/
-		window.location.reload();
-      }
-      else{
-        console.log('Error: ' + request.status);
-      }
-    }); 
+
+    if(document.getElementById('addMemberPWD').value===document.getElementById('confirmPWD').value || buttonType == 'Update'){ 	
+      // Send Input Data
+      request.open('POST', '/members', true);
+      request.setRequestHeader('content-type', 'application/json');
+      request.addEventListener('load', function(){
+	    var response = JSON.parse(request.responseText);
+        if(request.status >= 200 && request.status <400 && !response.SQLWarning){
+          console.log('Request Successful');
+		  // Source: https://techbriefers.com/10-methods-for-how-to-refresh-a-page-in-javascript/
+		  window.location.reload();
+        }
+        else{
+	      alert('Error: ' + response.SQLWarning);
+          console.log('Error: ' + response.SQLWarning);
+        }
+        }); 
     request.send(JSON.stringify(data));	
-	
+    }
+    else{
+      alert('The passwords entered do not match.');
+	}	
   });
 	
 }

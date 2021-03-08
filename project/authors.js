@@ -3,6 +3,7 @@ module.exports = function () {
 	var router = express.Router();
 	var mysql = require('./dbcon.js');
 	var bodyParser = require('body-parser');
+	var warnings = require("./warnings.js");
 
 	router.get('/', function (req, res) {
 		res.render('authors');
@@ -27,8 +28,11 @@ module.exports = function () {
 		mysql.pool.query("INSERT INTO Authors (`firstName`, `lastName`, `hometown`, `bio`) VALUES (?, ?, ?, ?)",
 			[req.query.firstName, req.query.lastName, req.query.hometown, req.query.bio], function (err, result) {
 				if (err) {
-					next(err);
-					return;
+					context.SQLWarning = warnings.message(err.errno,'first and last name combination');
+					console.log(err);
+				}
+				else{
+					context.SQLWarning = false;					
 				}
 			});
 		mysql.pool.query('SELECT firstName, lastName, hometown, bio FROM Authors ORDER BY lastName', function (err, rows, fields) {
@@ -45,17 +49,22 @@ module.exports = function () {
 		var context = {};
 		mysql.pool.query("UPDATE Authors SET firstName=?, lastName=?, hometown=?, bio=? WHERE authorID = ?", [req.query.firstName, req.query.lastName, req.query.hometown, req.query.bio, req.query.authorID], function (err, result) {
 			if (err) {
-				next(err);
-				return;
+				context.SQLWarning = warnings.message(err.errno,'first and last name combination');
+				console.log(err);
+				res.send(context);
 			}
-			mysql.pool.query("SELECT * FROM Authors ORDER BY lastName", function (err, rows, fields) {
-				if (err) {
-					next(err);
-					return;
-				}
-				res.type('application/json');
-				res.send(rows);
-			});
+			else{
+				mysql.pool.query("SELECT * FROM Authors ORDER BY lastName", function (err, rows, fields) {
+					if (err) {
+						next(err);
+						return;
+					}
+					context.SQLWarning = false;	
+					context.results = rows;
+					res.type('application/json');
+					res.send(context);
+				});
+			}
 		});
 	});
 

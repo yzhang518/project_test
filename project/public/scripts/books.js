@@ -26,8 +26,6 @@ function bindButtons(){
 	  data.addAuthor = true;
 	  sendData(data, 1);	
 	  
-      // Message that it was submitted
-//DELETE      document.getElementById('authorMessage').innerHTML = ""+data.firstName + " " + data.lastName + " submitted.";	 
       // Clear Author Fields
 	  document.getElementById('firstName').value = "";
 	  document.getElementById('lastName').value = "";	  
@@ -56,9 +54,6 @@ function bindButtons(){
 	  data.addCategory = true;
 	  sendData(data, 1);	
 	  
-      // Message that it was submitted
- //DELETE     document.getElementById('categoryMessage').innerHTML = ""+data.category+ " submitted.";
-
 	  // Clear Author Fields
 	  document.getElementById('category').value = "";	  
 	}

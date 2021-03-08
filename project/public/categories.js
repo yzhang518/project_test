@@ -159,7 +159,8 @@ function editRow(id) {
 				buildTable(response.results);
 			}
 			else {
-				alert('Error: ' + response.SQLWarning);			}
+				alert('Error: ' + response.SQLWarning);			
+			}
 		});
 
 		req.send();

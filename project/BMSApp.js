@@ -55,8 +55,14 @@ app.post('/members', function (req, res, next) {
       [req.body.firstName, req.body.lastName, req.body.phoneNum, req.body.memberEmail, req.body.memberPWD],
       function (err, result) {
         if (err) {
-          console.log(err);
+          context.SQLWarning = warnings.message(err.errno, 'member or member email');
+    	  console.log(err);
         }
+		else{
+          context.SQLWarning = false;
+		}
+		context.type = 'Members';
+        res.send(context);
       });
   }
 
@@ -66,12 +72,16 @@ app.post('/members', function (req, res, next) {
       [req.body.lastName, req.body.firstName, req.body.memberEmail, req.body.phoneNum, req.body.memberID],
       function (err, result) {
         if (err) {
-          console.log(err);
+          context.SQLWarning = warnings.message(err.errno, 'member or member email');
+    	  console.log(err);
         }
+		else{
+          context.SQLWarning = false;
+		}
+		context.type = 'Members';
+        res.send(context);
       });
   }
-  context.type = 'Members';
-  res.send(context);
 });
 
 
@@ -102,6 +112,12 @@ app.post('/books', function (req, res, next) {
 
   // Add Author Book Relationship 
   if (req.body['addAuthor']) {
+    mysql.pool.query("LOCK TABLES author_book_table WRITE, Authors WRITE, Books WRITE", function (err, result) {
+	  if (err) {
+		next(err);
+		return;
+	  }
+	  else{
     // Insert into author_book_table
     mysql.pool.query(
       "INSERT INTO author_book_table (authorID, bookID) VALUES ((SELECT authorID FROM Authors WHERE firstName = ? AND lastName = ?), (SELECT bookID FROM Books WHERE title = ?))",
@@ -114,9 +130,17 @@ app.post('/books', function (req, res, next) {
 		else{
           context.SQLWarning = false;
 		}
+	    mysql.pool.query("UNLOCK TABLES", function (err, result) {
+		  if (err) {
+			next(err);
+			return;
+		  }
+	    });
 		context.type = 'Books';
 	    res.send(context);
       });
+	  }
+	});
 
   }
 

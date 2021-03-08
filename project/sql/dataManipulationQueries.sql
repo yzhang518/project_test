@@ -16,6 +16,9 @@ UPDATE Members
 SET lastName=:lastNameInput, firstName=:firstNameInput, memberEmail=:memberEmailInput, phoneNum=:phoneNumInput
 WHERE memberID=:memberIDValue;
 
+--Borrows Page Member Name 
+SELECT firstName, lastName FROM Members WHERE memberEmail= :memberEmail;
+
 --Log In Page: Select from Members table
 SELECT memberPWD FROM Members WHERE memberID=:memberIDInput;
 
@@ -53,7 +56,6 @@ ORDER BY b.title;
 --Select from Books, Authors, Categories
 SELECT bookID, title, price, copyrightYear, publisher FROM Books ORDER BY title;
 SELECT firstName, lastName FROM author_book_table ab JOIN Authors a on ab.authorID = a.authorID AND ab.bookID = :bookIDVar;
---DELETE SELECT CONCAT(firstName, " ", lastName) AS fullName FROM author_book_table ab JOIN Authors a on ab.authorID = a.authorID AND ab.bookID = :bookIDVar;
 SELECT catName FROM cat_book_table cb JOIN Categories c on cb.catID = c.catID AND cb.bookID = :bookIDVar;
 
 
@@ -85,11 +87,6 @@ INNER JOIN Authors a ON a.authorID = ab.authorID
 ORDER BY a.lastName;
 
 
---I don't think we need an update for cat_book_table or author_book_table 
---because bookID, catID and authorID shouldn't change and if it does it should 
---be implemented with ON UPDATE
-
-
 -- Borrows table Manipulations --
 -- INSERT into Borrows
 -- Borrow books on Search page. 
@@ -113,6 +110,8 @@ JOIN Books ON Borrows.bookID = Books.bookID
 WHERE memberID = :memberID_input
 ORDER BY borrowDate;
 
+SELECT * FROM Members WHERE memberEmail = :memberEmail;
+
 -- UPDATE Borrows --
 -- Return A Book On View Borrows and Return Books page
 -- Need to update the availability to True in Books table
@@ -134,6 +133,8 @@ VALUES (
 
 -- SELECT from Authors 
 -- Display all the authors on Authors page
+SELECT * FROM Authors ORDER BY lastName
+
 SELECT firstName, lastName, hometown, bio FROM Authors
 ORDER BY lastName, firstName;
 
@@ -182,9 +183,3 @@ JOIN Categories ON cat_book_table.catID = Categories.catID
 WHERE CONCAT(firstName, ' ', lastName) LIKE :authorName_input
 ORDER BY bookTitle;
 
-
-
--- author_book_table / cat_book_table
--- Seems we only insert a row into or delete a row from intersection tables 
--- when we add a new book or delete a book. So authors and categories 
--- manipulations won`t affect the two intersection tables.

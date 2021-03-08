@@ -28,11 +28,12 @@ function bindButtons() {
 		//req.setRequestHeader('Content-Type', 'application/json');
 
 		req.addEventListener('load', function () {
-			if (req.status >= 200 && req.status < 400) {
-				var response = JSON.parse(req.responseText);
+			var response = JSON.parse(req.responseText);
+			if (req.status >= 200 && req.status < 400 && !response.SQLWarning) {
+						var response = JSON.parse(req.responseText);
 				buildTable(response.results);
 			} else {
-				alert("error" + req.statusText);
+				alert('Error: ' + response.SQLWarning);
 			}
 		});
 
@@ -158,12 +159,12 @@ function editRow(id) {
 		req.open("POST", "/authors/update" + query, true);
 
 		req.addEventListener('load', function () {
-			if (req.status >= 200 && req.status < 400) {
-				var reponse = JSON.parse(req.responseText)
+			var response = JSON.parse(req.responseText);
+			if (req.status >= 200 && req.status < 400 && !response.SQLWarning) {
 				buildTable(reponse);
 			}
 			else {
-				console.log("Error in network request: " + req.statusText);
+				alert('Error: ' + response.SQLWarning);		
 			}
 		});
 

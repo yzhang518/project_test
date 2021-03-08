@@ -28,7 +28,7 @@ module.exports = function () {
 		mysql.pool.query("INSERT INTO Categories (`catName`, `catDescription`) VALUES (?, ?)",
 			[req.query.catName, req.query.catDescription], function (err, result) {
 				if (err) {
-					context.SQLWarning = warnings.category[err.errno];
+					context.SQLWarning = warnings.message(err.errno,'category name');
 					console.log(err);
 				}
 				else{
@@ -52,7 +52,7 @@ module.exports = function () {
 
 		mysql.pool.query("UPDATE Categories SET catName=?, catDescription=? WHERE catID = ?", [req.query.catName, req.query.catDescription, req.query.catID], function (err, result) {
 			if (err) {
-				context.SQLWarning = warnings.category[err.errno];
+				context.SQLWarning = warnings.message(err.errno,'category name');
 				console.log(err);
 				res.send(context);
 			}
