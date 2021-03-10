@@ -1,39 +1,69 @@
-<head>
-    <meta charset="utf-8">
-    <title>Authors</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
-        integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-    <link rel="stylesheet" href="css/style.css">
-</head>
-
+<!-----------------------------------------------------------------------------
+Main Heading
+------------------------------------------------------------------------------->
 <h1>Manage Authors</h1>
-<br><br>
-<h2>Add an Author</h2>
-<form id="addAuthor" method="post">
-    <label for "firstName">First Name:</label>
-    <br>
-    <input type="text" name="firstName" id="firstName">
-    <br><br>
-    <label for "lastName">Last Name:</label>
-    <br>
-    <input type="text" name="lastName" id="lastName">
-    <br><br>
-    <label for "hometown">Hometown:</label>
-    <br>
-    <input type="text" name="hometown" id="hometown">
-    <br><br>
-    <label for "bio">Bio:</label>
-    <br>
-    <input type="text" name="bio" id="bio">
-    <br><br>
-    <input type="submit" id="authorSubmit" name="addAuthor" value="Add">
+
+<!-----------------------------------------------------------------------------
+Add New Authors
+------------------------------------------------------------------------------->
+<h2 class="mt-5">Add an Author</h2>
+<form id="addForm" class="mx-left p-2">
+
+    <label for="addFirstName"> First Name: </label>
+    <input class="form-control w-50" type="text" name="addFirstName" id="addFirstName" required>
+
+    <label for="addLastName"> Last Name: </label>
+    <input class="form-control w-50" type="text" name="addLastName" id="addLastName" required>
+
+    <label for="addHomeTown"> Hometown: </label>
+    <input class="form-control w-50" type="text" name="addHomeTown" id="addHometown" required>
+
+    <label for="addBio"> Bio: </label>
+    <input class="form-control w-50" type="text" name="addBio" id="addBio" required>
+
+    <input class="mt-2" type="submit" name="Add" value="Add">
 </form>
 
+<!-----------------------------------------------------------------------------
+Update 
+Sources: https://getbootstrap.com/docs/4.0/components/forms/ and
+	https://getbootstrap.com/docs/4.0/utilities/borders/
 
-<br><br>
-<br><br>
-<h2>Authors:</h2>
-<div id="authorTable">
-</div>
+------------------------------------------------------------------------------->
+<h2 class="mt-5">Authors:</h2>
+{{#if authors}}
+<table>
+    <thead>
+        <tr>
+            <th class="mx-left p-2">First Name</th>
+            <th class="mx-left p-2">Last Name</th>
+            <th class="mx-left p-2">Hometown</th>
+            <th class="mx-left p-2">Bio</th>
+        </tr>
+    </thead>
+    {{#each authors}}
+    <tr>
+        <td class="mx-left p-2"><input form="updateForm{{this.authorID}}" id="firstName{{this.authorID}}" type="text"
+                name="firstName" value="{{this.firstName}}" required></td>
+        <td class="mx-left p-2"><input form="updateForm{{this.authorID}}" id="lastName{{this.authorID}}" type="text"
+                name="lastName" value="{{this.lastName}}" required></td>
+        <td class="mx-left p-2"><input form="updateForm{{this.authorID}}" id="hometown{{this.authorID}}" type="text"
+                name="hometown" value="{{this.hometown}}" required></td>
+        <td class="mx-left p-2"><input form="updateForm{{this.authorID}}" id="bio{{this.authorID}}" type="text"
+                name="bio" value="{{this.bio}}" required></td>
+        <td class="mx-left p-2">
+            <form id="updateForm{{this.authorID}}">
+                <input form="updateForm{{this.authorID}}" type="hidden" name="id" id="{{this.authorID}}"
+                    value="{{this.authorID}}">
+                <input form="updateForm{{this.authorID}}" type="submit" name="Update" value="Update">
+            </form>
+        </td>
+    </tr>
+    {{/each}}
+</table>
+{{/if}}
 
+<!-----------------------------------------------------------------------------
+  Form Submission JS
+------------------------------------------------------------------------------->
 <script src="authors.js"></script>
