@@ -5,85 +5,60 @@ module.exports = function () {
 	var bodyParser = require('body-parser');
 	var warnings = require("./warnings.js");
 
-	router.get('/', function (req, res) {
-		res.render('categories');
-	});
-
-	router.get('/return-data', function (req, res, next) {
+	router.get('/', function (req, res, next) {
 		var context = {};
-		mysql.pool.query('SELECT catID, catName, catDescription FROM Categories ORDER BY catName', function (err, rows, fields) {
-			if (err) {
-				next(err);
-				return;
-			}
-			context.results = rows;
-			res.send(context);
-		});
-	});
 
-	// insert a new entry into the table
-	router.post('/insert', function (req, res, next) {
-		var context = {};
-		//console.log("server query", req.query);
-		mysql.pool.query("INSERT INTO Categories (`catName`, `catDescription`) VALUES (?, ?)",
-			[req.query.catName, req.query.catDescription], function (err, result) {
-				if (err) {
-					context.SQLWarning = warnings.message(err.errno,'category name');
-					console.log(err);
-				}
-				else{
-					context.SQLWarning = false;					
-				}
-			});
-		mysql.pool.query('SELECT catName, catDescription FROM Categories ORDER BY catName', function (err, rows, fields) {
+		mysql.pool.query("SELECT catName, catDescription, catID FROM Categories ORDER BY catName", function (err, result) {
 			if (err) {
-				next(err);
-				return;
-			}
-			context.results = rows;
-			res.send(context);
-		});
-	});
-
-	router.post('/update', function (req, res, next) {
-		var context = {};
-		console.log('server query', req.query);
-		console.log('server body', req.body);
-
-		mysql.pool.query("UPDATE Categories SET catName=?, catDescription=? WHERE catID = ?", [req.query.catName, req.query.catDescription, req.query.catID], function (err, result) {
-			if (err) {
-				context.SQLWarning = warnings.message(err.errno,'category name');
 				console.log(err);
-				res.send(context);
 			}
-			else{			
-			
-				mysql.pool.query("SELECT * FROM Categories ORDER BY catName", function (err, rows, fields) {
+			context.type = 'Categories';
+			context.categories = result;
+			//console.log(context.categories);
+			res.render('categories', context);
+		});
+	});
+
+	router.post('/', function (req, res, next) {
+		var context = {};
+		if (req.body['Add']) {
+			console.log('add');
+			mysql.pool.query(
+				"INSERT INTO Categories (catName, catDescription) VALUES (?,?)",
+				[req.body.catName, req.body.catDescription],
+				function (err, result) {
 					if (err) {
-						next(err);
-						return;
+						context.SQLWarning = warnings.message(err.errno, 'member or member email');
+						console.log(err);
 					}
-					context.SQLWarning = false;	
-					context.results = rows;
-					res.type('application/json');
+					else {
+						context.SQLWarning = false;
+					}
+					context.type = 'Categories';
 					res.send(context);
 				});
-			}
-		});
+		} else if (req.body['Update']) {
+			console.log('update', req.body);
+			mysql.pool.query(
+				"UPDATE Categories SET catName=?, catDescription=? WHERE catID = ?",
+				[req.body.catName, req.body.catDescription, req.body.catID],
+				function (err, result) {
+					if (err) {
+						context.SQLWarning = warnings.message(err.errno, 'category error');
+						console.log(err);
+					}
+					else {
+						context.SQLWarning = false;
+					}
+					context.type = 'Categories';
+					res.send(context);
+				});
+		}
 	});
 
 	return router;
 
 }();
-
-
-
-
-
-
-
-
-
 
 
 
