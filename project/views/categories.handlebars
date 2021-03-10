@@ -1,31 +1,57 @@
-<head>
-    <meta charset="utf-8">
-    <title>Authors Page</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
-        integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-    <link rel="stylesheet" href="css/style.css">
-</head>
+<!-----------------------------------------------------------------------------
+Main Heading
+------------------------------------------------------------------------------->
+<h1>Manage Categories</h1>
 
-<h1>Manage Categories </h1>
-<br><br>
-<h2>Add a Category</h2>
-<form method="post">
-    <label for "catName">Category Name:</label>
-    <br>
-    <input type="text" name="catName" id="catName">
-    <br><br>
-    <label for "catDescription">Category Description:</label>
-    <br>
-    <input type="text" name="catDescription" id="catDescription">
-    <br><br>
-    <input type="submit" id="catSubmit" name="addCategory" value="Add">
+<!-----------------------------------------------------------------------------
+Add New Categories
+------------------------------------------------------------------------------->
+<h2 class="mt-5">Add a Category</h2>
+<form id="addForm" class="mx-left p-2">
+
+  <label for="addCatName"> Category Name: </label>
+  <input class="form-control w-50" type="text" name="addCatName" id="addCatName" required>
+
+  <label for="addCatDescription"> Category Description: </label>
+  <input class="form-control w-50" type="text" name="addCatDescription" id="addCatDescription" required>
+
+  <input class="mt-2" type="submit" name="Add" value="Add">
 </form>
 
+<!-----------------------------------------------------------------------------
+Update Current Categories
+Sources: https://getbootstrap.com/docs/4.0/components/forms/ and
+	https://getbootstrap.com/docs/4.0/utilities/borders/
+	
 
-<br><br>
-<br><br>
-<h2>Categories:</h2>
-<div id="catTable">
-</div>
+------------------------------------------------------------------------------->
+<h2 class="mt-5">Categories:</h2>
+{{#if categories}}
+<table>
+  <thead>
+    <tr>
+      <th class="mx-left p-2">Category Name</th>
+      <th class="mx-left p-2">Category Description</th>
+    </tr>
+  </thead>
+  {{#each categories}}
+  <tr>
+    <td class="mx-left p-2"><input form="updateForm{{this.catID}}" id="catName{{this.catID}}" type="text" name="catName"
+        value="{{this.catName}}" required></td>
+    <td class="mx-left p-2"><input form="updateForm{{this.catID}}" id="catDescription{{this.catID}}" type="text"
+        name="catDescription" value="{{this.catDescription}}" required></td>
+    <td class="mx-left p-2">
+      <form id="updateForm{{this.catID}}">
+        <input form="updateForm{{this.catID}}" type="hidden" name="id" id="{{this.catID}}" value="{{this.catID}}">
+        <input form="updateForm{{this.catID}}" type="submit" name="Update" value="Update">
+      </form>
+    </td>
+  </tr>
+  {{/each}}
+</table>
+{{/if}}
 
+<!-----------------------------------------------------------------------------
+  Form Submission JS
+------------------------------------------------------------------------------->
 <script src="categories.js"></script>
