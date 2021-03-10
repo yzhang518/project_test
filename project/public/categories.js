@@ -1,226 +1,51 @@
-// initiate the page, display existing categoires if the database is not empty
-firstVisit();
-console.log('I`m here. First visit.')
-
-// set up add category button
 document.addEventListener('DOMContentLoaded', bindButtons);
+
 function bindButtons() {
-	document.getElementById("catSubmit").addEventListener('click', function (event) {
-		var req = new XMLHttpRequest();
+  var request = new XMLHttpRequest();
 
-		var payload = {
-			catName: document.getElementById("catName").value,
-			catDescription: document.getElementById("catDescription").value,
-		};
+  // Bind Buttons
+  document.body.addEventListener('submit', function (event) {
+    event.preventDefault();
+    //Source: https://www.daolf.com/posts/things-to-know-js-events/
+    var buttonType = event.target.lastElementChild.value;
+    var request = new XMLHttpRequest();
+    var data = {};
 
+    // Add category
+    if (buttonType == 'Add') {
+      data.catName = document.getElementById('addCatName').value;;
+      data.catDescription = document.getElementById('addCatDescription').value;
+      data.Add = true;
+    }
 
-		if (!payload.catName.length || !payload.catDescription.length) {
-			alert("Required Fields cannot be Empty!");
-			event.preventDefault();
-			return;
-		}
+    // Update category
+    else if (buttonType == 'Update') {
+      data.catID = event.target.lastElementChild.previousElementSibling.value;
+      data.catName = document.getElementById('catName' + data.catID).value;
+      data.catDescription = document.getElementById('catDescription' + data.catID).value;
+      data.Update = true;
+    }
 
-		var query = createQuery(payload);
-		console.log("insert query", query);
-		req.open("POST", "/categories/insert" + query, true);
-		//req.setRequestHeader('Content-Type', 'application/json');
-		req.addEventListener('load', function () {
-			var response = JSON.parse(req.responseText);
-			if (req.status >= 200 && req.status < 400 && !response.SQLWarning) {
-				buildTable(response.results);
-			} else {
-				alert('Error: ' + response.SQLWarning);
-			}
-		});
+    console.log(data);
 
-		req.send();
-		event.preventDefault();
-	});
-}
+    // Send Data
+    request.open('POST', '/categories', true);
+    request.setRequestHeader('content-type', 'application/json');
+    request.addEventListener('load', function () {
+      var response = JSON.parse(request.responseText);
+      if (request.status >= 200 && request.status < 400 && !response.SQLWarning) {
+        console.log('Request Successful');
+        // Source: https://techbriefers.com/10-methods-for-how-to-refresh-a-page-in-javascript/
+        window.location.reload();
+      }
+      else {
+        alert('Error: ' + response.SQLWarning);
+        console.log('Error: ' + response.SQLWarning);
+      }
+    });
 
-function firstVisit() {
-	var req = new XMLHttpRequest();
-	req.open("GET", "/categories/return-data", true);
+    request.send(JSON.stringify(data));
 
-	req.addEventListener('load', function () {
-		if (req.status >= 200 && req.status < 400) {
-			var response = JSON.parse(req.responseText);
-			buildTable(response.results);
-		}
-	});
-	req.send();
-}
+  });
 
-function buildTable(data) {
-	cleanUp();
-	console.log('I`m here. Build table.')
-
-	var div, headers, myTable, header, cell, keys, key, btnKeys, eventBtns;
-	div = document.getElementById("catTable")
-	headers = ["Category Name", "Category Description"];
-	keys = ["catName", "catDescription"]
-	btnKeys = ["edit"];
-
-	myTable = document.createElement("table");
-	headRow = document.createElement("tr");
-
-	// display header row
-	for (var i = 0; i < headers.length; i++) {
-		cell = document.createElement("th");
-		cell.innerHTML = headers[i];
-		headRow.appendChild(cell);
-	}
-	myTable.appendChild(headRow);
-
-	if (data == null) {
-		return;
-	}
-
-	// add data rows to the table 
-	data.forEach(addRows);
-	function addRows(item) {
-		var row = document.createElement("tr");
-		// add data info
-		for (var i = 0; i < headers.length; i++) {
-			cell = document.createElement("td");
-			key = keys[i];
-			cell.innerHTML = item[key];
-			row.appendChild(cell);
-		}
-
-		// add edit and delete button
-		for (var j = 0; j < btnKeys.length; j++) {
-			cell = document.createElement("td");
-			var a_form = document.createElement("form");
-			var input = document.createElement("input");
-			var btn = document.createElement("input");
-
-			input.type = "hidden"
-			input.value = item.catID;
-
-			btn.setAttribute("class", btnKeys[j]);
-			btn.type = "button";
-			btn.value = btnKeys[j].toUpperCase();
-			btn.id = btnKeys[j] + String(item.catID);
-
-			a_form.appendChild(btn);
-			a_form.appendChild(input);
-			cell.appendChild(a_form);
-			row.appendChild(cell);
-		}
-
-		myTable.appendChild(row);
-	}
-
-	div.appendChild(myTable);
-
-	eventBtns = document.getElementsByClassName("edit");
-	for (var k = 0; k < eventBtns.length; k++) {
-		var n = eventBtns[k].nextSibling.value;
-		attach_edit(n, eventBtns[k]);
-	}
-}
-
-// for using iteration to add edit eventlisteners
-function attach_edit(id, btn) {
-	btn.onclick = function () {
-		editRow(id);
-	}
-}
-
-function editRow(id) {
-	updateContent(id);
-	var updateID = "update" + String(id);
-
-	document.getElementById(updateID).addEventListener("click", function () {
-
-		var req = new XMLHttpRequest();
-		var payload = {
-			catName: document.getElementById("newName").value,
-			catDescription: document.getElementById("newDescription").value,
-		};
-
-		payload.catID = id;
-		
-		console.log('editrow', payload);
-		if (!payload.catName.length || !payload.catDescription.length) {
-			alert("Required Fields cannot be Empty!");
-			event.preventDefault();
-			return;
-		}
-		
-		var query = createQuery(payload) + "catID=" + payload.catID + "&";
-		//console.log("update query", query);
-		req.open("POST", "/categories/update" + query, true);
-
-		req.addEventListener('load', function () {
-			var response = JSON.parse(req.responseText);
-			if (req.status >= 200 && req.status < 400 && !response.SQLWarning) {
-				buildTable(response.results);
-			}
-			else {
-				alert('Error: ' + response.SQLWarning);			
-			}
-		});
-
-		req.send();
-		event.preventDefault();
-	});
-}
-
-
-function updateContent(id) {
-	// setup update button
-	var btnId = "edit" + String(id);
-	var curForm = document.getElementById(btnId).parentElement;
-	var updateBtn = document.createElement("input");
-	updateBtn.type = "button";
-	updateBtn.id = "update" + String(id);
-	updateBtn.value = "UPDATE";
-	curForm.appendChild(updateBtn);
-	document.getElementById(btnId).type = "hidden";
-
-	var headers = ["Name", "Description"];
-	//console.log(id);
-	var curRow = document.getElementById(btnId).parentElement.parentElement.parentElement;
-	var curCell = curRow.firstChild;
-	var newInput;
-	for (var i = 0; i < 2; i++) {
-		newInput = document.createElement("input");
-		newInput.value = curCell.innerHTML;
-
-
-		curCell.innerHTML = null;
-		newInput.id = "new" + headers[i];
-		curCell.appendChild(newInput);
-
-		curCell = curCell.nextSibling;
-	}
-}
-
-function createQuery(payload) {
-	var keys = ['catName', 'catDescription']
-	var a_query = "?";
-	keys.forEach(function (key) {
-		var ele = payload[key];
-		if (ele != null) {
-			a_query += key + "=" + ele + "&";
-		}
-	});
-	return a_query;
-};
-
-function cleanUp() {
-	console.log('I`m here. Clean up.')
-
-	var ids = ["catName", "catDescription"];
-	ids.forEach(myFunc);
-	function myFunc(id) {
-		document.getElementById(id).value = null;
-	}
-
-	var myDiv = document.getElementById("catTable");
-	if (myDiv.firstChild != null) {
-		myDiv.removeChild(myDiv.firstChild);
-	}
 }
