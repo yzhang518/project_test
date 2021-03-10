@@ -1,6 +1,6 @@
 
 /******************************************************************************
- ** Categories Page Scripts
+ ** Author Page Scripts
  ******************************************************************************/
 
 document.addEventListener('DOMContentLoaded', bindButtons);
