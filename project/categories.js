@@ -28,7 +28,7 @@ module.exports = function () {
 				[req.body.catName, req.body.catDescription],
 				function (err, result) {
 					if (err) {
-						context.SQLWarning = warnings.message(err.errno, 'member or member email');
+						context.SQLWarning = warnings.message(err.errno, 'categories error');
 						console.log(err);
 					}
 					else {
