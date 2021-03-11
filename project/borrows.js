@@ -10,12 +10,7 @@ module.exports = function () {
 
 	router.get('/return-data', function (req, res, next) {
 		var context = {};
-		if (!req.query.memberEmail || !req.query.memberPWD) {
-			context.results = [0];
-			res.send(context);
-		} else {
-			getMemberBorrows(req, res, next, context);
-		}
+		getMemberBorrows(req, res, next, context);
 	});
 
 	function getMemberBorrows(req, res, next, context) {
@@ -27,14 +22,9 @@ module.exports = function () {
 				next(err);
 				return;
 			}
-
-			//console.log("row len", rows.length);
-			//console.log("pwd", rows[0].memberPWD);
+			//console.log(rows);
 			if (rows.length == 0) {
-				context.results = [1];
-				res.send(context);
-			} else if (rows[0].memberPWD != req.query.memberPWD) {
-				context.results = [2];
+				context.results = [0];
 				res.send(context);
 			} else {
 				var a_query = 'SELECT borrowID, Books.bookID, firstName, lastName, transactionID, title, borrowDate, dueDate, returnDate FROM Members INNER JOIN Borrows ON Members.memberID = Borrows.memberID INNER JOIN Books ON Borrows.bookID = Books.bookID WHERE memberEmail = ? ORDER BY borrowDate';
@@ -50,10 +40,11 @@ module.exports = function () {
 								next(err);
 								return;
 							}
-							context.results = [3, rows];
+							context.results = [1, rows];
 							res.send(context);
 						});
 					} else {
+						//console.log(rows);
 						context.results = rows;
 						res.send(context);
 					}
@@ -64,7 +55,7 @@ module.exports = function () {
 
 	router.post('/update', function (req, res, next) {
 		var context = {};
-		console.log('req.query', req.query);
+		//console.log('req.query', req.query);
 		mysql.pool.query("UPDATE Books SET isAvailable=? WHERE bookID = ?", [req.query.isAvailable, req.query.bookID], function (err, result) {
 			if (err) {
 				next(err);
