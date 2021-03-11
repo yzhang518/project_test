@@ -112,12 +112,7 @@ app.post('/books', function (req, res, next) {
 
   // Add Author Book Relationship 
   if (req.body['addAuthor']) {
-    mysql.pool.query("LOCK TABLES author_book_table WRITE, Authors WRITE, Books WRITE", function (err, result) {
-	  if (err) {
-		next(err);
-		return;
-	  }
-	  else{
+
     // Insert into author_book_table
     mysql.pool.query(
       "INSERT INTO author_book_table (authorID, bookID) VALUES ((SELECT authorID FROM Authors WHERE firstName = ? AND lastName = ?), (SELECT bookID FROM Books WHERE title = ?))",
@@ -140,9 +135,7 @@ app.post('/books', function (req, res, next) {
 	    res.send(context);
       });
 	  }
-	});
 
-  }
 
   // Add Category Book Relationship 
   else if (req.body['addCategory']) {
@@ -227,6 +220,11 @@ app.post('/books', function (req, res, next) {
         if (err) {
           console.log(err);
         }
+		else
+		{
+		  context.SQLWarning = false;
+		  res.send(context);
+		}
       });
   }
 

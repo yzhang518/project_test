@@ -89,9 +89,11 @@ CREATE TABLE Borrows (
     returnDate date,
     PRIMARY KEY (borrowID),
     FOREIGN KEY (bookID)
-    REFERENCES Books(bookID),
+    REFERENCES Books(bookID)
+	ON DELETE SET NULL,
     FOREIGN KEY (memberID)
     REFERENCES Members(memberID)
+	ON DELETE CASCADE
 ) ENGINE=InnoDB;
 
 
@@ -121,7 +123,7 @@ VALUES
     "Charlotte Brontë was an English novelist and poet, the eldest of the three Brontë sisters who survived into adulthood and whose novels became classics of English literature."
     ),
     ('J.K.',
-    'Rowling ',
+    'Rowling',
     'Yate, United Kingdom',
     "Joanne Rowling, better known by her pen name J. K. Rowling, is a British author and philanthropist. She is best known for writing the Harry Potter fantasy series, which has won multiple awards and sold more than 500 million copies, becoming the best-selling book series in history."
     );
