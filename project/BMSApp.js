@@ -20,7 +20,6 @@ app.use('/borrows', require('./borrows.js'));
 app.use('/categories', require('./categories.js'));
 app.use('/authors', require('./authors.js'));
 app.use('/search', require('./search.js'));
-app.use('/login', require('./login.js'));
 
 /****************
  ** Index Page **

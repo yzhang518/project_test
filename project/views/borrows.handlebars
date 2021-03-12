@@ -1,24 +1,20 @@
 <head>
-    <meta charset="utf-8">
-    <title>Authors Page</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
-        integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
     <link rel="stylesheet" href="css/style.css">
 </head>
 
-<h2>My Account</h2>
+<h2>View a Member`s Borrows</h2>
 <br><br>
+
 <div id="topSec">
-    <form id="loginToViewBorrows" method="POST">
-        <label for "memberEmail">Email :</label>
-        <input type="text" name="memberEmail" id="memberEmail">
-        <br><br>
-        <label for "memberPwd">Password:</label>
-        <input type="password" name="memberPwd" id="memberPwd">
-        <br><br>
-        <input type="submit" id="loginSubmit" name="loginSubmit" value="LOG IN">
+    <form id="inputEmail" class="mx-left p-2">
+
+        <label for="memberEmail"> Please input member`s email address (lowercase, without spaces)</label>
+        <input class="form-control w-50" type="text" name="memberEmail" id="memberEmail">
+
+        <input class="mt-2" type="submit" name="Add" id="emailSubmit" value="Submit">
     </form>
 </div>
+
 
 <br><br>
 <br><br>

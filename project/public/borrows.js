@@ -1,32 +1,33 @@
-var alertMsg = {
-	0: "Required fields cannot be empty!",
-	1: "The email address is not in our records!",
-	2: " The pass word is not correct! Please try again."
-};
-
 document.getElementById('memberEmail').value = null;
-document.getElementById('memberPwd').value = null;
 
 document.addEventListener('DOMContentLoaded', bindButtons);
 function bindButtons() {
-	document.getElementById("loginSubmit").addEventListener('click', function (event) {
+	document.getElementById("emailSubmit").addEventListener('click', function (event) {
 		var req = new XMLHttpRequest();
 
 		var payload = {
-			memberEmail: document.getElementById('memberEmail').value,
-			memberPwd: document.getElementById('memberPwd').value
+			memberEmail: document.getElementById('memberEmail').value
 		};
+		console.log(payload.memberEmail);
+		if (payload.memberEmail.length == 0) {
+			alert("Email cannot be empty!");
+			return;
+		}
 
-		//console.log(payload);
-
-		var query = '?memberEmail=' + payload.memberEmail + '&' + 'memberPWD=' + payload.memberPwd;
+		var query = '?memberEmail=' + payload.memberEmail;
 		req.open('GET', '/borrows/return-data' + query, true);
 
 		req.addEventListener('load', function () {
 			if (req.status >= 200 && req.status < 400) {
 				var response = JSON.parse(req.responseText);
 				console.log(response.results);
-				loginValitation(response.results);
+				if (response.results[0] == 0) {
+					alert('Incorrect email address!');
+					return;
+				} else {
+					buildPage(response.results);
+				}
+
 			}
 		});
 		req.send();
@@ -34,28 +35,8 @@ function bindButtons() {
 	});
 }
 
-function loginValitation(results) {
-	if (results[0] == 0) {
-		alert(alertMsg[0]);
-		return;
-	}
-
-	if (results[0] == 1) {
-		alert(alertMsg[1]);
-		return;
-	}
-
-	if (results[0] == 2) {
-		alert(alertMsg[2]);
-		return;
-	}
-
-	buildPage(results);
-}
-
-
 function buildPage(data) {
-	if (data[0] == 3) {
+	if (data[0] == 1) {
 		clearTopSec(data[1], "No borrowed items!");
 		return;
 	}
@@ -143,8 +124,8 @@ function buildPage(data) {
 function clearTopSec(data, s) {
 	// clear login form and display member name
 	var topDiv = document.getElementById("topSec");
-	var loginForm = document.getElementById("loginToViewBorrows");
-	topDiv.removeChild(loginForm);
+	var emailInput = document.getElementById("inputEmail");
+	topDiv.removeChild(emailInput);
 
 	var memberName = document.createElement("p");
 	memberName.id = "memberName";
