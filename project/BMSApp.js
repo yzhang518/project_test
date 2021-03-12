@@ -99,8 +99,15 @@ app.get('/books', function (req, res, next) {
       }
       context.type = 'Books';
       context.books = result;
-	  
-      getLists(0, context, res);
+	  mysql.pool.query(
+	    "SELECT catName FROM Categories ORDER BY catName", 
+		function (err, result) {
+          if (err) {
+		    console.log(err);
+          }
+	    context.dropdown = result;
+        getLists(0, context, res);
+	  });
 
     });
 });

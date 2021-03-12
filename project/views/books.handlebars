@@ -11,22 +11,23 @@ Add New Book
 ***Not sure the best way to add multiple authors and categories?
 ------------------------------------------------------------------------------->
 	<h2  class="mt-5">Add a Book</h2>
+
 	<form id="addForm" class="mx-left p-2">
 	  
       <label for="title">Title</label>
       <input class="form-control w-50" type="text" name="title" id="title" required>
 
-      <label for="firstName">Author's First Name</label>
+      <label for="firstName">Author's First Name <br><small>Must match an existing author exactly and is case sensitive.</small></label>
       <input class="form-control w-50" type="text" name="firstName" id="firstName" required>
 	  
-      <label for="lastName">Author's Last Name</label>
+      <label for="lastName">Author's Last Name <br><small>Must match an existing author exactly and is case sensitive.</small></label>
       <input class="form-control w-50" type="text" name="lastName" id="lastName" required>
  
 	  <button class="mt-2 mb-2 d-block" id="addAuthor" name="addAuthor">Additional Author</button>
 	  <p class="text-success" id="authorMessage"></p>
 
 	  <label for="price">Price</label>
-      <input class="form-control w-50" type="number" step="0.01" name="price" id="price" required>
+      <input class="form-control w-50" type="number" step="0.01" min="0" max="999999999999.99" name="price" id="price" required>
 	  
 	  <label for="copyrightYear">Copyright Year</label>
       <input class="form-control w-50" type="text" name="copyrightYear" id="copyrightYear" required>
@@ -35,8 +36,16 @@ Add New Book
       <input class="form-control w-50" type="text" name="publisher" id="publisher" required>
 	  
 	  <label for="category">Category</label>
+	  {{#if dropdown}}
+	  <select class="form-control w-50" type="text" name="category" id="category" required>
+        {{#each dropdown}}
+	    <option value={{this.catName}}>{{this.catName}}</option>
+		{{/each}}
+	  </select>
+	  {{else}}
+	  <p>You must add a category on the category page before adding a book.</p>	
       <input class="form-control w-50" type="text" name="category" id="category" required>	  
-
+	  {{/if}}
 	  <button class="mt-2 mb-2 d-block" id="addCategory" name="addCategory">Additional Category</button>
 	  <p class="text-success" id="categoryMessage"></p>	  
 	  
