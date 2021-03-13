@@ -38,8 +38,14 @@ Sources: https://getbootstrap.com/docs/4.0/components/forms/ and
   <tr>
     <td class="mx-left p-2"><input form="updateForm{{this.catID}}" id="catName{{this.catID}}" type="text" name="catName"
         value="{{this.catName}}" required></td>
+	
+    <td class="mx-left p-2"><textarea style="resize:none" rows="2" cols="100" form="updateForm{{this.catID}}"
+        id="catDescription{{this.catID}}" type="text" name="catDescription" required>{{this.catDescription}}</textarea>
+    </td>
+    <!--    
     <td class="mx-left p-2"><input form="updateForm{{this.catID}}" id="catDescription{{this.catID}}" type="text"
         name="catDescription" value="{{this.catDescription}}" required></td>
+	--->
     <td class="mx-left p-2">
       <form id="updateForm{{this.catID}}">
         <input form="updateForm{{this.catID}}" type="hidden" name="id" id="{{this.catID}}" value="{{this.catID}}">
