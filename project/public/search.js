@@ -8,6 +8,11 @@ function bindButtons() {
 			searchInput: document.getElementById('searchInput').value.replace(/(^\s*)|(\s*$)/g, ""),
 			searchBy: document.querySelector('input[name="searchBy"]:checked').value
 		};
+		
+		if (!payload.searchInput.length) {
+			alert("Please input a search term!")
+			return;
+		}
 
 		req.open("POST", "/search/select", true);
 		req.setRequestHeader('Content-Type', 'application/json');
