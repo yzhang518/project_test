@@ -28,8 +28,8 @@ function bindButtons() {
 		// Update category
 		else if (buttonType == 'Update') {
 			data.authorID = event.target.lastElementChild.previousElementSibling.value;
-			data.firstName = document.getElementById('firstName' + data.authorID).value;
-			data.lastName = document.getElementById('lastName' + data.authorID).value;
+			data.firstName = document.getElementById('firstName' + data.authorID).value.replace(/(^\s*)|(\s*$)/g, "");
+			data.lastName = document.getElementById('lastName' + data.authorID).value.replace(/(^\s*)|(\s*$)/g, "");
 			data.bio = document.getElementById('bio' + data.authorID).value;
 			data.hometown = document.getElementById('hometown' + data.authorID).value;
 			data.Update = true;
