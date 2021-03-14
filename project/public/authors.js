@@ -18,8 +18,8 @@ function bindButtons() {
 
 		// Add category
 		if (buttonType == 'Add') {
-			data.firstName = document.getElementById('addFirstName').value;;
-			data.lastName = document.getElementById('addLastName').value;
+			data.firstName = document.getElementById('addFirstName').value.replace(/(^\s*)|(\s*$)/g, "");
+			data.lastName = document.getElementById('addLastName').value.replace(/(^\s*)|(\s*$)/g, "");
 			data.hometown = document.getElementById('addHometown').value;
 			data.bio = document.getElementById('addBio').value;
 			data.Add = true;
