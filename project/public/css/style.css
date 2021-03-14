@@ -21,13 +21,6 @@ td{
     text-align: center;
 }
 
-p {
-    height: 100px;  
-    width: 300px;
-    font: 16px Arial, Serif;
-    overflow: auto;
-}
-
 #memberName {
     font-size: 25px;
 }
