@@ -1,0 +1,55 @@
+<head>
+    <meta charset="UTF-8" />
+    <link rel="stylesheet" href="css/style.css">
+    <title>Search</title>
+</head>
+
+
+<h2>Browse the Catalog</h2>
+<form id="searchForm">
+    <legend>Search By:</legend>
+    <br>
+    <label>
+        <input type="radio" name="searchBy" value="author" checked=1 />Author</label>
+    <br>
+    <label>
+        <input type="radio" name="searchBy" value="category" />Category</label>
+    <br>
+    <label>
+        <input type="radio" name="searchBy" value="title" />Book Title</label>
+    <br><br>
+    <label for="searchInput"> Add a search term (author name or category name or book title):</label>
+    <br>
+    <input class="form-control w-50" type="text" name="searchInput" id="searchInput" />
+    <br>
+    <input type="submit" id="searchSubmit" value="SEARCH" />
+</form>
+
+<br><br>
+<br><br>
+
+<h2>Search Results:</h2>
+<div id="searchDiv">
+    <table id="searchResult">
+        <thead>
+            <tr>
+                <th>Title</th>
+                <th>Author</th>
+                <th>Category</th>
+                <th>Availability</th>
+            </tr>
+        <tbody id="tableBody">
+
+        </tbody>
+        </thead>
+    </table>
+    <br><br>
+
+    <label for="memberEmail"> Please input member`s email address (lowercase, without spaces)</label>
+    <input class="form-control w-50" type="text" name="memberEmail" id="memberEmail">
+    <br><br>
+
+    <input type="submit" id="borrowSubmit" value="BORROW">
+</div>
+
+<script src="search.js"></script>
