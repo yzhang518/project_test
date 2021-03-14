@@ -13,7 +13,7 @@ function bindButtons() {
 
     // Add category
     if (buttonType == 'Add') {
-      data.catName = document.getElementById('addCatName').value;;
+      data.catName = document.getElementById('addCatName').value.replace(/(^\s*)|(\s*$)/g, "");
       data.catDescription = document.getElementById('addCatDescription').value;
       data.Add = true;
     }
@@ -21,7 +21,7 @@ function bindButtons() {
     // Update category
     else if (buttonType == 'Update') {
       data.catID = event.target.lastElementChild.previousElementSibling.value;
-      data.catName = document.getElementById('catName' + data.catID).value;
+      data.catName = document.getElementById('catName' + data.catID).value.replace(/(^\s*)|(\s*$)/g, "");
       data.catDescription = document.getElementById('catDescription' + data.catID).value;
       data.Update = true;
     }
