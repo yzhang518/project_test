@@ -48,9 +48,16 @@ Sources: https://getbootstrap.com/docs/4.0/components/forms/ and
         <td class="mx-left p-2"><input form="updateForm{{this.authorID}}" id="lastName{{this.authorID}}" type="text"
                 name="lastName" value="{{this.lastName}}" required></td>
         <td class="mx-left p-2"><input form="updateForm{{this.authorID}}" id="hometown{{this.authorID}}" type="text"
-                name="hometown" value="{{this.hometown}}" required></td>
+                name="hometown" value="{{this.hometown}}" required></td>	
+        <td class="mx-left p-2"><textarea style="resize:none" rows="2" cols="100" form="updateForm{{this.authorID}}"
+                id="bio{{this.authorID}}" type="text" name="bio" required>{{this.bio}}</textarea>
+        </td>
+	
+<!--	
         <td class="mx-left p-2"><input form="updateForm{{this.authorID}}" id="bio{{this.authorID}}" type="text"
                 name="bio" value="{{this.bio}}" required></td>
+--->		
+
         <td class="mx-left p-2">
             <form id="updateForm{{this.authorID}}">
                 <input form="updateForm{{this.authorID}}" type="hidden" name="id" id="{{this.authorID}}"

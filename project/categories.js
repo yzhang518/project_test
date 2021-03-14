@@ -28,7 +28,7 @@ module.exports = function () {
 				[req.body.catName, req.body.catDescription],
 				function (err, result) {
 					if (err) {
-						context.SQLWarning = warnings.message(err.errno, 'categories error');
+						context.SQLWarning = warnings.message(err.errno, 'category');
 						console.log(err);
 					}
 					else {

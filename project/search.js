@@ -10,18 +10,28 @@ module.exports = function () {
 
 	router.post('/select', function (req, res, next) {
 		var context = {};
-		//console.log(req.query.length);
-		//console.log("query", req.query);
 
 		var condition = '', a_query;
 		var tableName = req.body.searchBy;
+
 		if (tableName == 'title') {
-			condition = 'Books.title = ' + "'" + req.body.searchInput + "'";
+			condition = 'Books.title LIKE ' + "'%" + req.body.searchInput + "%'";
 		} else if (tableName == 'category') {
-			condition = 'Categories.catName = ' + "'" + req.body.searchInput + "'";
+			condition = 'Categories.catName LIKE ' + "'%" + req.body.searchInput + "%'";
 		} else {
-			condition = "CONCAT(firstName, ' ', lastName) LIKE " + "'" + req.body.searchInput + "'";
+			var str = "CONCAT(firstName, ' ', lastName) LIKE ";
+			var splitInput = req.body.searchInput.trim().split(/\s+/);
+
+			for (var i = 0; i < splitInput.length; i++) {
+				if (i == splitInput.length - 1) {
+					condition += str + "'%" + splitInput[i] + "%'";
+				} else {
+					condition += str + "'%" + splitInput[i] + "%'" + "OR ";
+				}
+			}
 		}
+
+		console.log(condition);
 
 		a_query = "SELECT Books.bookID, title, CONCAT(firstName,' ',lastName) AS fullName, catName, isAvailable FROM Books INNER JOIN author_book_table ON Books.bookID = author_book_table.bookID INNER JOIN Authors ON author_book_table.authorID = Authors.authorID INNER JOIN cat_book_table ON Books.bookID = cat_book_table.bookID INNER JOIN Categories ON cat_book_table.catID = Categories.catID WHERE " + condition + 'ORDER BY Books.bookID';
 
@@ -42,32 +52,49 @@ module.exports = function () {
 
 	router.post('/insert-borrow', function (req, res, next) {
 		var context = {};
-		var a_query = "INSERT INTO Borrows (`bookID`, `transactionID`, `borrowDate`, `dueDate`, `returnDate`, `memberID`) VALUES (?, ?, ?, ?, ?, ? )";
+		// getMemberID
+		mysql.pool.query("SELECT memberID FROM Members WHERE memberEmail=?", [req.body.memberEmail], function (err, rows, fields) {
+			if (err) {
+				next(err);
+				return;
+			}
+			// check if the input email is correct
+			if (rows.length == 0) {
+				context.results = [0];
+				res.send(context);
+				return;
+			}
 
-		var i;
-		for (i = 0; i < req.body.bookIDs.length; i++) {
-			var bookID = req.body.bookIDs[i];
-			var a_list = [bookID, req.body.transactionID, req.body.borrowDate, req.body.dueDate, req.body.returnDate, req.body.memberID];
+			context.a = rows[0].memberID;
+			// insert new borrows
+			var a_query = "INSERT INTO Borrows (`bookID`, `transactionID`, `borrowDate`, `dueDate`, `returnDate`, `memberID`) VALUES (?, ?, ?, ?, ?, ? )";
 
-			mysql.pool.query(a_query, a_list, function (err, result) {
-				if (err) {
-					next(err);
-					return;
-				}
-			});
+			var i;
+			for (i = 0; i < req.body.bookIDs.length; i++) {
+				var bookID = req.body.bookIDs[i];
+				var a_list = [bookID, req.body.transactionID, req.body.borrowDate, req.body.dueDate, req.body.returnDate, context.a];
 
-			// update availability to 0
-			mysql.pool.query("UPDATE Books SET isAvailable=? WHERE bookID = ?", [0, bookID], function (err, result) {
-				if (err) {
-					next(err);
-					return;
-				}
-			});
-		}
-		context.results = [i];
-		res.send(context);
+				mysql.pool.query(a_query, a_list, function (err, result) {
+					if (err) {
+						next(err);
+						return;
+					}
+				});
+
+				// update availability to 0 in Books table
+				mysql.pool.query("UPDATE Books SET isAvailable=? WHERE bookID = ?", [0, bookID], function (err, result) {
+					if (err) {
+						next(err);
+						return;
+					}
+				});
+			}
+			context.results = [i];
+			res.send(context);
+		});
 	});
 
+	// used to display multiple authors and categories
 	function mergeDupBooks(i, rows) {
 		if (i + 1 == rows.length) {
 			return rows;

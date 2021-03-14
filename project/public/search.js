@@ -1,8 +1,3 @@
-var a_member = {
-	memberID: 1,
-	memberEmail: 'test@gmail.com',
-	memberPWD: 'test'
-}
 
 document.addEventListener('DOMContentLoaded', bindButtons);
 function bindButtons() {
@@ -10,9 +5,14 @@ function bindButtons() {
 		var req = new XMLHttpRequest();
 
 		var payload = {
-			searchInput: document.getElementById('searchInput').value,
+			searchInput: document.getElementById('searchInput').value.replace(/(^\s*)|(\s*$)/g, ""),
 			searchBy: document.querySelector('input[name="searchBy"]:checked').value
 		};
+		
+		if (!payload.searchInput.length) {
+			alert("Please input a search term!")
+			return;
+		}
 
 		req.open("POST", "/search/select", true);
 		req.setRequestHeader('Content-Type', 'application/json');
@@ -54,10 +54,15 @@ function bindButtons() {
 				borrowDate: now.toISOString().slice(0, 10),
 				returnDate: null,
 				dueDate: addDays(now, 30),
-				memberID: a_member.memberID
+				memberEmail: document.getElementById("memberEmail").value
 			};
 
 			console.log(payload);
+
+			if (!payload.memberEmail.length) {
+				alert("Please input the email address!")
+				return;
+			}
 
 			req.open("POST", "/search/insert-borrow", true);
 			req.setRequestHeader('Content-Type', 'application/json');
@@ -65,8 +70,14 @@ function bindButtons() {
 			req.addEventListener('load', function () {
 				if (req.status >= 200 && req.status < 400) {
 					var response = JSON.parse(req.responseText);
-					alert(response.results[0] + ' book(s) borrowed!');
-					window.location.reload();
+					if (response.results[0] == 0) {
+						alert("Incorrect email address!");
+						return;
+					} else {
+						alert(response.results[0] + ' book(s) borrowed!');
+						window.location.reload();
+					}
+
 				} else {
 					alert("error" + req.statusText);
 				}
@@ -119,7 +130,7 @@ function buildTable(data) {
 }
 
 function addDays(date, days) {
-	const copy = new Date(Number(date))
-	copy.setDate(date.getDate() + days)
-	return copy
+	const copy = new Date(Number(date));
+	copy.setDate(date.getDate() + days);
+	return copy;
 }

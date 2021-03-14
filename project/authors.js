@@ -27,7 +27,7 @@ module.exports = function () {
 				[req.body.firstName, req.body.lastName, req.body.hometown, req.body.bio],
 				function (err, result) {
 					if (err) {
-						context.SQLWarning = warnings.message(err.errno, 'authors error');
+						context.SQLWarning = warnings.message(err.errno, 'author');
 						console.log(err);
 					}
 					else {
