@@ -58,6 +58,8 @@ SELECT bookID, title, price, copyrightYear, publisher FROM Books ORDER BY title;
 SELECT firstName, lastName FROM author_book_table ab JOIN Authors a on ab.authorID = a.authorID AND ab.bookID = :bookIDVar;
 SELECT catName FROM cat_book_table cb JOIN Categories c on cb.catID = c.catID AND cb.bookID = :bookIDVar;
 
+--Select from Categories for Books page dropdown
+SELECT catName FROM Categories ORDER BY catName
 
 --Books Page: Delete from Books table 
 --(Delete from cat_book_table is covered by delete on cascade when a book is deleted)
@@ -107,7 +109,7 @@ VALUES(
 -- QUERY UPDATED
 SELECT borrowID, Books.bookID, firstName, lastName, transactionID, title, borrowDate, dueDate, returnDate FROM Members 
 INNER JOIN Borrows ON Members.memberID = Borrows.memberID 
-INNER JOIN Books ON Borrows.bookID = Books.bookID 
+INNER LEFT JOIN Books ON Borrows.bookID = Books.bookID 
 WHERE memberEmail = :memberEmail_input
 ORDER BY borrowDate
 

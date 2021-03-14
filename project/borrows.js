@@ -27,7 +27,7 @@ module.exports = function () {
 				context.results = [0];
 				res.send(context);
 			} else {
-				var a_query = 'SELECT borrowID, Books.bookID, firstName, lastName, transactionID, title, borrowDate, dueDate, returnDate FROM Members INNER JOIN Borrows ON Members.memberID = Borrows.memberID INNER JOIN Books ON Borrows.bookID = Books.bookID WHERE memberEmail = ? ORDER BY borrowDate';
+				var a_query = 'SELECT borrowID, Books.bookID, firstName, lastName, transactionID, title, borrowDate, dueDate, returnDate FROM Members INNER JOIN Borrows ON Members.memberID = Borrows.memberID LEFT JOIN Books ON Borrows.bookID = Books.bookID WHERE memberEmail = ? ORDER BY borrowDate';
 				mysql.pool.query(a_query, [req.query.memberEmail], function (err, rows, fields) {
 					if (err) {
 						next(err);
