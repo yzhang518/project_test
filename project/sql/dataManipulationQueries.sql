@@ -19,8 +19,6 @@ WHERE memberID=:memberIDValue;
 --Borrows Page Member Name 
 SELECT firstName, lastName FROM Members WHERE memberEmail= :memberEmail;
 
---Log In Page: Select from Members table
-SELECT memberPWD FROM Members WHERE memberID=:memberIDInput;
 
 --Books Page: Insert into cat_book_table
 INSERT INTO cat_book_table (catID, bookID)
