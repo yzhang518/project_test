@@ -92,10 +92,10 @@ function buildPage(data) {
 
 		// add return button
 		cell = document.createElement("td");
-		if (item.returnDate) {
-			cell.innerHTML = "RETURNED";
-		} else if (item.bookID==null){
+		if (item.bookID==null){
 			cell.innerHTML = "Book Removed from System (to show NULLable relationship)";
+		} else if (item.returnDate) {
+			cell.innerHTML = "RETURNED";
 		}else {
 			var a_form = document.createElement("form");
 			var input = document.createElement("input");

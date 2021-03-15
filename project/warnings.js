@@ -1,11 +1,11 @@
 const author_book = {
 	1062: 'The author you entered is already listed for that title.',
-	1048: 'No such book title or author exists. Please verify book title and author name on the books and authors pages and try again.'
+	1048: 'No such book title or no such author exists. Please verify book title and/or author name on the books and authors pages and try again.'
 };
 
 const category_book = {
 	1062: 'The category you entered is already listed for that title.',
-	1048: 'No such book title or category exists. Please verify book title and category name on the books and categories pages and try again.'
+	1048: 'No such book title exists. Please verify book title on the books page and try again.'
 };
 
 const book = {

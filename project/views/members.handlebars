@@ -16,8 +16,8 @@ Add New Member
       <label for="addLastName">Last Name</label>
       <input class="form-control w-50" type="text" name="addLastName" id="addLastName" required>
 	  
-	  <label for="addPhoneNum">Phone Number<br><small>10 digits only. No spaces or special characters.</small></label>
-      <input class="form-control w-50" type="tel" name="addPhoneNum" id="addPhoneNum" pattern="[0-9].{9,9}" title="10 digits" required>
+	  <label for="addPhoneNum">Phone Number<br><small>Format: xxx-xxx-xxxx</small></label>
+      <input class="form-control w-50" type="tel" name="addPhoneNum" id="addPhoneNum" pattern="[0-9].{2,2}[-][0-9].{2,2}[-][0-9].{3,3}" title="xxx-xxx-xxxx" required>
 	  
 	  <label for="addMemberEmail">Email Address</label>
       <input class="form-control w-50" type="email" name="addMemberEmail" id="addMemberEmail" required>
@@ -56,7 +56,7 @@ Sources: https://getbootstrap.com/docs/4.0/components/forms/ and
         <td class="mx-left p-2"><input form="updateForm{{this.memberID}}" id="lastName{{this.memberID}}" type="text" name="lastName" value="{{this.lastName}}" required></td>
         <td class="mx-left p-2"><input form="updateForm{{this.memberID}}" id="firstName{{this.memberID}}" type="text" name="firstName" value="{{this.firstName}}" required></td>
 		<td class="mx-left p-2"><input form="updateForm{{this.memberID}}" id="memberEmail{{this.memberID}}" type="email" name="memberEmail" value="{{this.memberEmail}}" required></td>
-		<td class="mx-left p-2"><input form="updateForm{{this.memberID}}" id="phoneNum{{this.memberID}}" type="tel" name="phoneNum" value="{{this.phoneNum}}" required></td>
+		<td class="mx-left p-2"><input form="updateForm{{this.memberID}}" id="phoneNum{{this.memberID}}" type="tel" name="phoneNum" value="{{this.phoneNum}}" pattern="[0-9].{2,2}[-][0-9].{2,2}[-][0-9].{3,3}" title="xxx-xxx-xxxx" required></td>
         <td class="mx-left p-2">
 		  <form id="updateForm{{this.memberID}}">
             <input form="updateForm{{this.memberID}}" type="hidden" name="id" id="{{this.memberID}}" value="{{this.memberID}}">
