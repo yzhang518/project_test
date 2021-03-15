@@ -168,26 +168,26 @@ INSERT INTO Borrows (bookID, memberID, transactionID, borrowDate, dueDate, retur
 VALUES(
     1,
     (SELECT memberID FROM Members WHERE memberEmail='test@gmail.com'),
-    CONCAT(CURDATE(),'-',1),
-    CURDATE(),
-    DATE_ADD(CURDATE(), INTERVAL 21 DAY),
-	NULL
+    1615673070284,
+    2021-03-13,
+    2021-04-12,
+    2021-03-13
 ),
 (
     2,
-    2,
-    CONCAT(CURDATE(),'-',1),
-    CURDATE(),
-    DATE_ADD(CURDATE(), INTERVAL 21 DAY),
-	NULL
+    (SELECT memberID FROM Members WHERE memberEmail='test@gmail.com'),
+    1615673121579,
+    2021-03-13,
+    2021-04-12,
+    2021-03-13
 ),
 (
     3,
-    3,
-    CONCAT(CURDATE(),'-',1),
-    CURDATE(),
-    DATE_ADD(CURDATE(), INTERVAL 21 DAY),
-	NULL
+    (SELECT memberID FROM Members WHERE memberEmail='test@gmail.com'),
+    1615813379790,
+    2021-03-15,
+    2021-04-14,
+    2021-03-15
 );
 
 
